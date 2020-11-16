@@ -1,46 +1,32 @@
 package ie.beyond2022.utils;
 
 import java.io.IOException;
-import java.util.HashMap;
+import java.time.LocalDate;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class DateFromString {
 
     DateFromRegnalDate dateFromRegnalDate = new DateFromRegnalDate();
-    Map<String, Integer> months = null;
-    Map<String, Integer> ordinals = null;
+
+    Map<String, Integer> months = Stream.of(new Object[][]{
+            {"jan", 1}, {"feb", 2}, {"mar", 3}, {"apr", 4}, {"may", 5}, {"jun", 6},
+            {"jul", 7}, {"aug", 8}, {"sep", 9}, {"oct", 10}, {"nov", 11}, {"dec", 12}
+    }).collect(Collectors.toMap(data -> (String) data[0], data -> (Integer) data[1]));
+
+    Map<String, Integer> ordinals = Stream.of(new Object[][]{
+            {"i", 1}, {"ii", 2}, {"iii", 3}, {"iv", 4}, {"v", 5}, {"vi", 6}, {"vii", 7}, {"viii", 8}
+    }).collect(Collectors.toMap(data -> (String) data[0], data -> (Integer) data[1]));
 
     Pattern pattern = Pattern.compile("(((\\d+) ([a-zA-Z]+\\.?)) ((\\d+) ([a-zA-Z]+\\.?) ([A-Z]+)))");
 
     public DateFromString() throws IOException {
-        months = new HashMap<String, Integer>();
-        months.put("jan", 1);
-        months.put("feb", 2);
-        months.put("mar", 3);
-        months.put("apr", 4);
-        months.put("may", 5);
-        months.put("jun", 6);
-        months.put("jul", 7);
-        months.put("aug", 8);
-        months.put("sep", 9);
-        months.put("oct", 10);
-        months.put("nov", 11);
-        months.put("dec", 12);
-
-        ordinals = new HashMap<String, Integer>();
-        ordinals.put("i", 1);
-        ordinals.put("ii", 2);
-        ordinals.put("iii", 3);
-        ordinals.put("iv", 4);
-        ordinals.put("v", 5);
-        ordinals.put("vi", 6);
-        ordinals.put("vii", 7);
-        ordinals.put("viii", 8);
     }
 
-    public String parse(String text) {
+    public RegnalDate parse(String text) {
 
         Matcher m = pattern.matcher(text);
         if (m.matches()) {
@@ -63,10 +49,11 @@ public class DateFromString {
             String ordinal = m.group(8).toLowerCase();
             Integer ordinal_val = ordinals.get(ordinal);
 
-            return dateFromRegnalDate.dateFromRegnal(Integer.parseInt(date), month_val, Integer.parseInt(regnal),
+            LocalDate dateObj = dateFromRegnalDate.dateFromRegnal(Integer.parseInt(date), month_val, Integer.parseInt(regnal),
                     monarch, ordinal_val);
+            return new RegnalDate(text, dateObj);
         } else {
-            return "";
+            return null;
         }
     }
 

@@ -1,6 +1,8 @@
 package ie.beyond2022.utils;
 
 import java.io.IOException;
+import java.time.LocalDate;
+
 
 public class DateFromRegnalDate {
 
@@ -15,9 +17,7 @@ public class DateFromRegnalDate {
         return regnalDateLookup.lookup(key);
     }
 
-    public String dateFromRegnal(int date, int month, int regnal, String monarch, int ordinal) {
-
-        String output = "";
+    public LocalDate dateFromRegnal(int dayOfMonth, int month, int regnal, String monarch, int ordinal) {
 
         RegnalYear regnalYear = rangeForRegnalYear(regnal, monarch, ordinal);
 
@@ -34,17 +34,16 @@ public class DateFromRegnalDate {
         int end_year = Integer.parseInt(end_tmp[0]);
 
         if (month > start_month) {
-            output = String.format("%d-%02d-%02d", start_year, month, date);
+            return LocalDate.of(start_year, month, dayOfMonth);
         } else if (month == start_month) {
-            if (date >= start_date) {
-                output = String.format("%d-%02d-%02d", start_year, month, date);
+            if (dayOfMonth >= start_date) {
+                return LocalDate.of(start_year, month, dayOfMonth);
             } else {
-                output = String.format("%d-%02d-%02d", end_year, month, date);
+                return LocalDate.of(end_year, month, dayOfMonth);
             }
         } else {
-            output = String.format("%d-%02d-%02d", end_year, month, date);
+            return LocalDate.of(end_year, month, dayOfMonth);
         }
 
-        return output;
     }
 }
