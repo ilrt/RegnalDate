@@ -8,7 +8,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class DateFromString {
+public class RegnalDateFromString {
 
     DateFromRegnalDate dateFromRegnalDate = new DateFromRegnalDate();
 
@@ -23,7 +23,7 @@ public class DateFromString {
 
     Pattern pattern = Pattern.compile("(((\\d+) ([a-zA-Z]+\\.?)) ((\\d+) ([a-zA-Z]+\\.?) ([A-Z]+)))");
 
-    public DateFromString() throws IOException {
+    public RegnalDateFromString() throws IOException {
     }
 
     public RegnalDate parse(String text) {

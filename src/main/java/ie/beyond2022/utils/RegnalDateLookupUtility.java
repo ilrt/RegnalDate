@@ -15,7 +15,7 @@ import java.util.Map;
  * The string is delimited by colons. The first represents the monarch and is the key in the Map, while the
  * other two provide the start and end dates (as a string).
  */
-public class RegnalDateLookup {
+public class RegnalDateLookupUtility {
 
     protected Map<String, RegnalYear> dateLookup;
 
@@ -24,7 +24,7 @@ public class RegnalDateLookup {
      *
      * @throws IOException if it can't open the data file.
      */
-    public RegnalDateLookup() throws IOException {
+    public RegnalDateLookupUtility() throws IOException {
 
         dateLookup = new HashMap<String, RegnalYear>();
 
@@ -50,11 +50,7 @@ public class RegnalDateLookup {
      * @return a RegnalYear object or null.
      */
     public RegnalYear lookup(String lookupCode) {
-        if (dateLookup.containsKey(lookupCode)) {
-            return dateLookup.get(lookupCode);
-        } else {
-            return null;
-        }
+        return dateLookup.getOrDefault(lookupCode, null);
     }
 
 }

@@ -6,15 +6,15 @@ import java.time.LocalDate;
 
 public class DateFromRegnalDate {
 
-    RegnalDateLookup regnalDateLookup;
+    RegnalDateLookupUtility regnalDateLookupUtility;
 
     public DateFromRegnalDate() throws IOException {
-        regnalDateLookup = new RegnalDateLookup();
+        regnalDateLookupUtility = new RegnalDateLookupUtility();
     }
 
-    public RegnalYear rangeForRegnalYear(int regnal, String monarch, int ordinal) {
+    protected RegnalYear rangeForRegnalYear(int regnal, String monarch, int ordinal) {
         String key = String.format("%s-%d-%d", monarch, ordinal, regnal);
-        return regnalDateLookup.lookup(key);
+        return regnalDateLookupUtility.lookup(key);
     }
 
     public LocalDate dateFromRegnal(int dayOfMonth, int month, int regnal, String monarch, int ordinal) {
