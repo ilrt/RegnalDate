@@ -12,10 +12,15 @@ import java.time.format.DateTimeFormatter;
 public class RegnalDate {
 
     private final String originalText;
+    private final String dayMonthText;
+    private final String regnalYearMonarch;
     private final LocalDate localDate;
 
-    public RegnalDate(final String originalText, final LocalDate localDate) {
+    public RegnalDate(final String originalText, final String dayMonthText, final String regnalYearMonarch,
+                      final LocalDate localDate) {
         this.originalText = originalText;
+        this.dayMonthText = dayMonthText;
+        this.regnalYearMonarch = regnalYearMonarch;
         this.localDate = localDate;
     }
 
@@ -25,6 +30,14 @@ public class RegnalDate {
 
     public LocalDate getLocalDate() {
         return localDate;
+    }
+
+    public String getDayMonthText() {
+        return dayMonthText;
+    }
+
+    public String getRegnalYearMonarch() {
+        return regnalYearMonarch;
     }
 
     public int getYear() {

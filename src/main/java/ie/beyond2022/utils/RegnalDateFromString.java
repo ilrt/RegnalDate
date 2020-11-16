@@ -31,6 +31,9 @@ public class RegnalDateFromString {
         Matcher m = pattern.matcher(text);
         if (m.matches()) {
 
+            // group 2 has the day + month, while group 5 has the regnal year, monarch and their ordinal number
+            // group 3 has the day of the month, while group 4 is the month
+
             // date
             String date = m.group(3);
 
@@ -49,9 +52,12 @@ public class RegnalDateFromString {
             String ordinal = m.group(8).toLowerCase();
             Integer ordinal_val = ordinals.get(ordinal);
 
+            String dayMonthText = m.group(2);
+            String regalYearMonarch = m.group(5);
+
             LocalDate dateObj = dateFromRegnalDate.dateFromRegnal(Integer.parseInt(date), month_val, Integer.parseInt(regnal),
                     monarch, ordinal_val);
-            return new RegnalDate(text, dateObj);
+            return new RegnalDate(text, dayMonthText, regalYearMonarch, dateObj);
         } else {
             return null;
         }
