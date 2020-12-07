@@ -16,7 +16,7 @@ public class RegnalDateFromStringTest {
         assertEquals("1216-10-28", val.toString());
         assertEquals("28 October", val.getDayMonthText());
         assertEquals("1 Henry III", val.getRegnalYearMonarch());
-        assertEquals(1216, val.getYear());
+        assertEquals("1216", val.getYear());
     }
 
     @Test
@@ -25,7 +25,7 @@ public class RegnalDateFromStringTest {
         assertEquals("1216-10-28", val.toString());
         assertEquals("28 Oct.", val.getDayMonthText());
         assertEquals("1 Hen. III", val.getRegnalYearMonarch());
-        assertEquals(1216, val.getYear());
+        assertEquals("1216", val.getYear());
     }
 
     @Test
@@ -34,7 +34,7 @@ public class RegnalDateFromStringTest {
         assertEquals("1217-01-01", val.toString());
         assertEquals("1 January", val.getDayMonthText());
         assertEquals("1 Henry III", val.getRegnalYearMonarch());
-        assertEquals(1217, val.getYear());
+        assertEquals("1217", val.getYear());
     }
 
     @Test
@@ -43,7 +43,7 @@ public class RegnalDateFromStringTest {
         assertEquals("1217-01-01", val.toString());
         assertEquals("1 January", val.getDayMonthText());
         assertEquals("1 Hen. III", val.getRegnalYearMonarch());
-        assertEquals(1217, val.getYear());
+        assertEquals("1217", val.getYear());
     }
 
     // ---------- Edward I
@@ -54,7 +54,7 @@ public class RegnalDateFromStringTest {
         assertEquals("1272-11-21", val.toString());
         assertEquals("21 November", val.getDayMonthText());
         assertEquals("1 Edward I", val.getRegnalYearMonarch());
-        assertEquals(1272, val.getYear());
+        assertEquals("1272", val.getYear());
     }
 
     @Test
@@ -63,7 +63,7 @@ public class RegnalDateFromStringTest {
         assertEquals("1273-11-18", val.toString());
         assertEquals("18 Nov.", val.getDayMonthText());
         assertEquals("1 Edw. I", val.getRegnalYearMonarch());
-        assertEquals(1273, val.getYear());
+        assertEquals("1273", val.getYear());
     }
 
     // ---------- Edward II
@@ -74,7 +74,7 @@ public class RegnalDateFromStringTest {
         assertEquals("1307-07-10", val.toString());
         assertEquals("10 July", val.getDayMonthText());
         assertEquals("1 Edward II", val.getRegnalYearMonarch());
-        assertEquals(1307, val.getYear());
+        assertEquals("1307", val.getYear());
     }
 
     @Test
@@ -83,7 +83,7 @@ public class RegnalDateFromStringTest {
         assertEquals("1308-07-01", val.toString());
         assertEquals("1 Jul.", val.getDayMonthText());
         assertEquals("1 Edw. II", val.getRegnalYearMonarch());
-        assertEquals(1308, val.getYear());
+        assertEquals("1308", val.getYear());
     }
 
     // ---------- Edward III
@@ -94,7 +94,7 @@ public class RegnalDateFromStringTest {
         assertEquals("1327-01-26", val.toString());
         assertEquals("26 January", val.getDayMonthText());
         assertEquals("1 Edward III", val.getRegnalYearMonarch());
-        assertEquals(1327, val.getYear());
+        assertEquals("1327", val.getYear());
     }
 
     @Test
@@ -103,7 +103,7 @@ public class RegnalDateFromStringTest {
         assertEquals("1328-01-10", val.toString());
         assertEquals("10 Jan.", val.getDayMonthText());
         assertEquals("1 Edw. III", val.getRegnalYearMonarch());
-        assertEquals(1328, val.getYear());
+        assertEquals("1328", val.getYear());
     }
 
     // ---------- Richard II
@@ -114,7 +114,7 @@ public class RegnalDateFromStringTest {
         assertEquals("1377-06-25", val.toString());
         assertEquals("25 June", val.getDayMonthText());
         assertEquals("1 Richard II", val.getRegnalYearMonarch());
-        assertEquals(1377, val.getYear());
+        assertEquals("1377", val.getYear());
     }
 
     @Test
@@ -123,7 +123,7 @@ public class RegnalDateFromStringTest {
         assertEquals("1378-06-10", val.toString());
         assertEquals("10 Jun.", val.getDayMonthText());
         assertEquals("1 Ric. II", val.getRegnalYearMonarch());
-        assertEquals(1378, val.getYear());
+        assertEquals("1378", val.getYear());
     }
 
     // ---------- Henry IV
@@ -134,7 +134,7 @@ public class RegnalDateFromStringTest {
         assertEquals("1399-09-30", val.toString());
         assertEquals("30 September", val.getDayMonthText());
         assertEquals("1 Henry IV", val.getRegnalYearMonarch());
-        assertEquals(1399, val.getYear());
+        assertEquals("1399", val.getYear());
     }
 
     @Test
@@ -143,7 +143,7 @@ public class RegnalDateFromStringTest {
         assertEquals("1400-09-29", val.toString());
         assertEquals("29 Sep.", val.getDayMonthText());
         assertEquals("1 Hen. IV", val.getRegnalYearMonarch());
-        assertEquals(1400, val.getYear());
+        assertEquals("1400", val.getYear());
     }
 
     // ---------- Henry V
@@ -154,7 +154,7 @@ public class RegnalDateFromStringTest {
         assertEquals("1413-03-21", val.toString());
         assertEquals("21 March", val.getDayMonthText());
         assertEquals("1 Henry V", val.getRegnalYearMonarch());
-        assertEquals(1413, val.getYear());
+        assertEquals("1413", val.getYear());
     }
 
     @Test
@@ -163,7 +163,7 @@ public class RegnalDateFromStringTest {
         assertEquals("1414-03-20", val.toString());
         assertEquals("20 March", val.getDayMonthText());
         assertEquals("1 Henry V", val.getRegnalYearMonarch());
-        assertEquals(1414, val.getYear());
+        assertEquals("1414", val.getYear());
     }
 
     // ---------- Henry VI
@@ -174,7 +174,7 @@ public class RegnalDateFromStringTest {
         assertEquals("1422-09-01", val.toString());
         assertEquals("1 September", val.getDayMonthText());
         assertEquals("1 Henry VI", val.getRegnalYearMonarch());
-        assertEquals(1422, val.getYear());
+        assertEquals("1422", val.getYear());
     }
 
     @Test
@@ -183,7 +183,7 @@ public class RegnalDateFromStringTest {
         assertEquals("1423-08-31", val.toString());
         assertEquals("31 Aug.", val.getDayMonthText());
         assertEquals("1 Henry VI", val.getRegnalYearMonarch());
-        assertEquals(1423, val.getYear());
+        assertEquals("1423", val.getYear());
     }
 
     @Test
@@ -192,7 +192,7 @@ public class RegnalDateFromStringTest {
         assertEquals("1470-10-10", val.toString());
         assertEquals("10 October", val.getDayMonthText());
         assertEquals("49 Henry VI", val.getRegnalYearMonarch());
-        assertEquals(1470, val.getYear());
+        assertEquals("1470", val.getYear());
     }
 
     @Test
@@ -201,7 +201,7 @@ public class RegnalDateFromStringTest {
         assertEquals("1471-01-12", val.toString());
         assertEquals("12 Jan.", val.getDayMonthText());
         assertEquals("49 Hen. VI", val.getRegnalYearMonarch());
-        assertEquals(1471, val.getYear());
+        assertEquals("1471", val.getYear());
     }
 
     // ---------- Edward IV
@@ -212,7 +212,7 @@ public class RegnalDateFromStringTest {
         assertEquals("1461-03-04", val.toString());
         assertEquals("4 March", val.getDayMonthText());
         assertEquals("1 Edward IV", val.getRegnalYearMonarch());
-        assertEquals(1461, val.getYear());
+        assertEquals("1461", val.getYear());
     }
 
     @Test
@@ -221,7 +221,7 @@ public class RegnalDateFromStringTest {
         assertEquals("1462-03-01", val.toString());
         assertEquals("1 Mar.", val.getDayMonthText());
         assertEquals("1 Edw. IV", val.getRegnalYearMonarch());
-        assertEquals(1462, val.getYear());
+        assertEquals("1462", val.getYear());
     }
 
     // ---------- Edward V
@@ -232,7 +232,7 @@ public class RegnalDateFromStringTest {
         assertEquals("1483-05-10", val.toString());
         assertEquals("10 May", val.getDayMonthText());
         assertEquals("1 Edward V", val.getRegnalYearMonarch());
-        assertEquals(1483, val.getYear());
+        assertEquals("1483", val.getYear());
     }
 
     // ---------- Richard III
@@ -243,7 +243,7 @@ public class RegnalDateFromStringTest {
         assertEquals("1483-06-26", val.toString());
         assertEquals("26 Jun.", val.getDayMonthText());
         assertEquals("1 Rich. III", val.getRegnalYearMonarch());
-        assertEquals(1483, val.getYear());
+        assertEquals("1483", val.getYear());
     }
 
     @Test
@@ -252,7 +252,7 @@ public class RegnalDateFromStringTest {
         assertEquals("1484-06-20", val.toString());
         assertEquals("20 Jun.", val.getDayMonthText());
         assertEquals("1 Rich. III", val.getRegnalYearMonarch());
-        assertEquals(1484, val.getYear());
+        assertEquals("1484", val.getYear());
     }
 
 
@@ -264,7 +264,7 @@ public class RegnalDateFromStringTest {
         assertEquals("1485-08-22", val.toString());
         assertEquals("22 August", val.getDayMonthText());
         assertEquals("1 Henry VII", val.getRegnalYearMonarch());
-        assertEquals(1485, val.getYear());
+        assertEquals("1485", val.getYear());
     }
 
     @Test
@@ -273,7 +273,7 @@ public class RegnalDateFromStringTest {
         assertEquals("1486-08-21", val.toString());
         assertEquals("21 Aug.", val.getDayMonthText());
         assertEquals("1 Hen. VII", val.getRegnalYearMonarch());
-        assertEquals(1486, val.getYear());
+        assertEquals("1486", val.getYear());
     }
 
 }

@@ -12,7 +12,7 @@ public class DateFromRegnalDate {
         regnalDateLookupUtility = new RegnalDateLookupUtility();
     }
 
-    protected RegnalYear rangeForRegnalYear(int regnal, String monarch, int ordinal) {
+    public RegnalYear rangeForRegnalYear(int regnal, String monarch, int ordinal) {
         String key = String.format("%s-%d-%d", monarch, ordinal, regnal);
         return regnalDateLookupUtility.lookup(key);
     }

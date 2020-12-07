@@ -21,43 +21,80 @@ public class RegnalDateFromString {
             {"i", 1}, {"ii", 2}, {"iii", 3}, {"iv", 4}, {"v", 5}, {"vi", 6}, {"vii", 7}, {"viii", 8}
     }).collect(Collectors.toMap(data -> (String) data[0], data -> (Integer) data[1]));
 
-    Pattern pattern = Pattern.compile("(((\\d+) ([a-zA-Z]+\\.?)) ((\\d+) ([a-zA-Z]+\\.?) ([A-Z]+)))");
+    // regnal year, with a day amd month, e.g. 4 June 3 Henry III
+    Pattern dayMonthRegnalPattern = Pattern.compile("(((\\d+) ([a-zA-Z]+\\.?)) ((\\d+) ([a-zA-Z]+\\.?) ([A-Z]+)))");
+
+    // regnal year, but no day and month
+    Pattern regnalPattern = Pattern.compile("((\\d+) ([a-zA-Z]+\\.?) ([A-Z]+))");
 
     public RegnalDateFromString() throws IOException {
     }
 
+    private String normalizeMonarch(String name) {
+        return name.toLowerCase().substring(0, 3);
+    }
+
+    private Integer normalizeOrdinal(String ordinal) {
+        return ordinals.get(ordinal.toLowerCase());
+    }
+
+    private Integer normalizeRegnal(String regnal) {
+        return Integer.parseInt(regnal);
+    }
+
     public RegnalDate parse(String text) {
 
-        Matcher m = pattern.matcher(text);
-        if (m.matches()) {
+        Matcher dayMonthMatcher = dayMonthRegnalPattern.matcher(text);
+        Matcher regnalYearMatcher = regnalPattern.matcher(text);
+
+        if (dayMonthMatcher.matches()) {
 
             // group 2 has the day + month, while group 5 has the regnal year, monarch and their ordinal number
             // group 3 has the day of the month, while group 4 is the month
 
             // date
-            String date = m.group(3);
+            String date = dayMonthMatcher.group(3);
 
             // month
-            String month = m.group(4).toLowerCase();
+            String month = dayMonthMatcher.group(4).toLowerCase();
             month = month.substring(0, 3);
             int month_val = months.get(month);
 
             // regnal
-            String regnal = m.group(6);
+            Integer regnal = normalizeRegnal(dayMonthMatcher.group(6));
 
             // monarch
-            String monarch = m.group(7).toLowerCase().substring(0, 3);
+            String monarch = normalizeMonarch(dayMonthMatcher.group(7));
 
             // ordinal
-            String ordinal = m.group(8).toLowerCase();
-            Integer ordinal_val = ordinals.get(ordinal);
+            Integer ordinal = normalizeOrdinal(dayMonthMatcher.group(8));
 
-            String dayMonthText = m.group(2);
-            String regalYearMonarch = m.group(5);
+            String dayMonthText = dayMonthMatcher.group(2);
+            String regalYearMonarch = dayMonthMatcher.group(5);
 
-            LocalDate dateObj = dateFromRegnalDate.dateFromRegnal(Integer.parseInt(date), month_val, Integer.parseInt(regnal),
-                    monarch, ordinal_val);
+            LocalDate dateObj = dateFromRegnalDate.dateFromRegnal(Integer.parseInt(date), month_val, regnal,
+                    monarch, ordinal);
             return new RegnalDate(text, dayMonthText, regalYearMonarch, dateObj);
+        } else if (regnalYearMatcher.matches()) {
+
+            // group 2 is the regnal year
+            Integer regnal = normalizeRegnal(regnalYearMatcher.group(2));
+            // group 3 is the monarch
+            String monarch = normalizeMonarch(regnalYearMatcher.group(3));
+            // group 4 is the ordinal
+            Integer ordinal = normalizeOrdinal(regnalYearMatcher.group(4));
+            String regalYearMonarch = regnalYearMatcher.group(1);
+
+            RegnalYear regnalYear = dateFromRegnalDate.rangeForRegnalYear(regnal, monarch, ordinal);
+            String[] tmp_s = regnalYear.getRegnalYearStart().split("-");
+            String[] tmp_e = regnalYear.getRegnalYearEnd().split("-");
+            LocalDate startDate = LocalDate.of(Integer.parseInt(tmp_s[0]), Integer.parseInt(tmp_s[1]),
+                    Integer.parseInt(tmp_s[2]));
+            LocalDate endDate = LocalDate.of(Integer.parseInt(tmp_e[0]), Integer.parseInt(tmp_e[1]),
+                    Integer.parseInt(tmp_e[2]));
+
+            return new RegnalDate(text, regalYearMonarch, startDate, endDate);
+
         } else {
             return null;
         }
