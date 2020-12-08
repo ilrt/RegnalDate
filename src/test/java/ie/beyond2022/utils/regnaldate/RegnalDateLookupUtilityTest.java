@@ -1,5 +1,6 @@
-package ie.beyond2022.utils;
+package ie.beyond2022.utils.regnaldate;
 
+import ie.beyond2022.utils.regnaldate.RegnalDateLookupUtility;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;

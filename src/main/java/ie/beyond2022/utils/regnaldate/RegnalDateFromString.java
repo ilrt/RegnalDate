@@ -1,4 +1,4 @@
-package ie.beyond2022.utils;
+package ie.beyond2022.utils.regnaldate;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -8,6 +8,11 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+/**
+ * Converts a string that describes a regnal date, e.g. '26 March 1 Edward I' into a string representation of
+ * a date in 'YYYY-MM-DD' format; or a regnal year, e.g. '1 Edward I' into a string representation of a date
+ * range in 'YYYY-MM-DD:YYYY-MM-DD' format.
+ */
 public class RegnalDateFromString {
 
     DateFromRegnalDate dateFromRegnalDate = new DateFromRegnalDate();

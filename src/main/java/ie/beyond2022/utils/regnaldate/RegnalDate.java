@@ -1,4 +1,4 @@
-package ie.beyond2022.utils;
+package ie.beyond2022.utils.regnaldate;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -9,8 +9,9 @@ import java.time.format.DateTimeFormatter;
  * and a representation as a LocalDate. The toString(), method returns the date in the format
  * YYYY-MM-DD, e.g. '1422-09-10'.
  */
-public class RegnalDate extends Regnal {
+public class RegnalDate {
 
+    private final String originalText;
     private final String dayMonthText;
     private final String regnalYearMonarch;
     private final LocalDate startDate;
@@ -18,7 +19,7 @@ public class RegnalDate extends Regnal {
 
     public RegnalDate(final String originalText, final String dayMonthText, final String regnalYearMonarch,
                       final LocalDate startDate) {
-        super(originalText);
+        this.originalText = originalText;
         this.dayMonthText = dayMonthText;
         this.regnalYearMonarch = regnalYearMonarch;
         this.startDate = startDate;
@@ -27,11 +28,15 @@ public class RegnalDate extends Regnal {
 
     public RegnalDate(final String originalText, final String regnalYearMonarch, final LocalDate startDate,
                       final LocalDate endDate) {
-        super(originalText);
+        this.originalText = originalText;
         this.dayMonthText = null;
         this.regnalYearMonarch = regnalYearMonarch;
         this.startDate = startDate;
         this.endDate = endDate;
+    }
+
+    public String getOriginalText() {
+        return originalText;
     }
 
     public String getDayMonthText() {

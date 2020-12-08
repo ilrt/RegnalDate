@@ -1,5 +1,5 @@
 
-package ie.beyond2022.utils;
+package ie.beyond2022.utils.regnaldate;
 
 public class RegnalYear {
     /**
