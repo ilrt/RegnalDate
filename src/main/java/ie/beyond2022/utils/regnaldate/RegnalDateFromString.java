@@ -32,6 +32,15 @@ public class RegnalDateFromString {
     // regnal year, but no day and month
     Pattern regnalPattern = Pattern.compile("((\\d+) ([a-zA-Z]+\\.?) ([A-Z]+))");
 
+    // Easter
+    Pattern easterPattern = Pattern.compile("\\b[E|e]aster\\b");
+
+    // octave ... related to a feast
+    Pattern octavePattern = Pattern.compile("\\boctave\\b");
+
+    // quindene ... related to a feast
+    Pattern quindenePattern = Pattern.compile("\\bquindene\\b");
+
     public RegnalDateFromString() throws IOException {
     }
 
@@ -47,12 +56,56 @@ public class RegnalDateFromString {
         return Integer.parseInt(regnal);
     }
 
+    public RegnalDate regnalDate(Matcher matcher, String text) {
+        // group 2 is the regnal year
+        Integer regnal = normalizeRegnal(matcher.group(2));
+        // group 3 is the monarch
+        String monarch = normalizeMonarch(matcher.group(3));
+        // group 4 is the ordinal
+        Integer ordinal = normalizeOrdinal(matcher.group(4));
+        String regalYearMonarch = matcher.group(1);
+
+        RegnalYear regnalYear = dateFromRegnalDate.rangeForRegnalYear(regnal, monarch, ordinal);
+        String[] tmp_s = regnalYear.getRegnalYearStart().split("-");
+        String[] tmp_e = regnalYear.getRegnalYearEnd().split("-");
+        LocalDate startDate = LocalDate.of(Integer.parseInt(tmp_s[0]), Integer.parseInt(tmp_s[1]),
+                Integer.parseInt(tmp_s[2]));
+        LocalDate endDate = LocalDate.of(Integer.parseInt(tmp_e[0]), Integer.parseInt(tmp_e[1]),
+                Integer.parseInt(tmp_e[2]));
+
+        return new RegnalDate(text, regalYearMonarch, startDate, endDate);
+    }
+
     public RegnalDate parse(String text) {
 
+        Matcher easterMatcher = easterPattern.matcher(text);
+        Matcher quindeneMatcher = quindenePattern.matcher(text);
+        Matcher octaveMatcher = octavePattern.matcher(text);
         Matcher dayMonthMatcher = dayMonthRegnalPattern.matcher(text);
         Matcher regnalYearMatcher = regnalPattern.matcher(text);
 
-        if (dayMonthMatcher.matches()) {
+        if (easterMatcher.matches()) {
+
+            if (regnalYearMatcher.matches()) {
+                RegnalDate regnalDate = this.regnalDate(regnalYearMatcher, text);
+                String year_range = regnalDate.getYear();
+                String[] year_range_tmp = year_range.split(":");
+                String start = year_range_tmp[0];
+                String end = year_range_tmp[1];
+
+                String[] start_tmp = start.split("-");
+                String[] end_tmp = end.split("-");
+
+                if (Integer.parseInt(start_tmp[1]) > 4) {
+
+                }
+
+            }
+            return null;
+        } else if (quindeneMatcher.matches() || octaveMatcher.matches()) {
+
+            return null;
+        } else if (dayMonthMatcher.matches()) {
 
             // group 2 has the day + month, while group 5 has the regnal year, monarch and their ordinal number
             // group 3 has the day of the month, while group 4 is the month
@@ -82,24 +135,7 @@ public class RegnalDateFromString {
             return new RegnalDate(text, dayMonthText, regalYearMonarch, dateObj);
         } else if (regnalYearMatcher.matches()) {
 
-            // group 2 is the regnal year
-            Integer regnal = normalizeRegnal(regnalYearMatcher.group(2));
-            // group 3 is the monarch
-            String monarch = normalizeMonarch(regnalYearMatcher.group(3));
-            // group 4 is the ordinal
-            Integer ordinal = normalizeOrdinal(regnalYearMatcher.group(4));
-            String regalYearMonarch = regnalYearMatcher.group(1);
-
-            RegnalYear regnalYear = dateFromRegnalDate.rangeForRegnalYear(regnal, monarch, ordinal);
-            String[] tmp_s = regnalYear.getRegnalYearStart().split("-");
-            String[] tmp_e = regnalYear.getRegnalYearEnd().split("-");
-            LocalDate startDate = LocalDate.of(Integer.parseInt(tmp_s[0]), Integer.parseInt(tmp_s[1]),
-                    Integer.parseInt(tmp_s[2]));
-            LocalDate endDate = LocalDate.of(Integer.parseInt(tmp_e[0]), Integer.parseInt(tmp_e[1]),
-                    Integer.parseInt(tmp_e[2]));
-
-            return new RegnalDate(text, regalYearMonarch, startDate, endDate);
-
+            return this.regnalDate(regnalYearMatcher, text);
         } else {
             return null;
         }
