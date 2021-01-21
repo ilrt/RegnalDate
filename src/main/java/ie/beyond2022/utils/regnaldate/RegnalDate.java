@@ -12,15 +12,15 @@ import java.time.format.DateTimeFormatter;
 public class RegnalDate {
 
     private final String originalText;
-    private final String dayMonthText;
+    private final String dayMonthFeastText;
     private final String regnalYearMonarch;
     private final LocalDate startDate;
     private final LocalDate endDate;
 
-    public RegnalDate(final String originalText, final String dayMonthText, final String regnalYearMonarch,
+    public RegnalDate(final String originalText, final String dayMonthFeastText, final String regnalYearMonarch,
                       final LocalDate startDate) {
         this.originalText = originalText;
-        this.dayMonthText = dayMonthText;
+        this.dayMonthFeastText = dayMonthFeastText;
         this.regnalYearMonarch = regnalYearMonarch;
         this.startDate = startDate;
         this.endDate = null;
@@ -29,7 +29,7 @@ public class RegnalDate {
     public RegnalDate(final String originalText, final String regnalYearMonarch, final LocalDate startDate,
                       final LocalDate endDate) {
         this.originalText = originalText;
-        this.dayMonthText = null;
+        this.dayMonthFeastText = null;
         this.regnalYearMonarch = regnalYearMonarch;
         this.startDate = startDate;
         this.endDate = endDate;
@@ -39,8 +39,8 @@ public class RegnalDate {
         return originalText;
     }
 
-    public String getDayMonthText() {
-        return dayMonthText;
+    public String getDayMonthFeastText() {
+        return dayMonthFeastText;
     }
 
     public String getRegnalYearMonarch() {

@@ -16,6 +16,7 @@ import java.util.stream.Stream;
 public class RegnalDateFromString {
 
     DateFromRegnalDate dateFromRegnalDate = new DateFromRegnalDate();
+    EasterDateLookupUtility easterLookup = new  EasterDateLookupUtility();
 
     Map<String, Integer> months = Stream.of(new Object[][]{
             {"jan", 1}, {"feb", 2}, {"mar", 3}, {"apr", 4}, {"may", 5}, {"jun", 6},
@@ -26,6 +27,9 @@ public class RegnalDateFromString {
             {"i", 1}, {"ii", 2}, {"iii", 3}, {"iv", 4}, {"v", 5}, {"vi", 6}, {"vii", 7}, {"viii", 8}
     }).collect(Collectors.toMap(data -> (String) data[0], data -> (Integer) data[1]));
 
+    // regnal year, with a feast
+    Pattern feastRegnalPattern = Pattern.compile("((([a-zA-Z]+ )+)((\\d+) ([a-zA-Z]+\\.?) ([A-Z]+)))");
+
     // regnal year, with a day amd month, e.g. 4 June 3 Henry III
     Pattern dayMonthRegnalPattern = Pattern.compile("(((\\d+) ([a-zA-Z]+\\.?)) ((\\d+) ([a-zA-Z]+\\.?) ([A-Z]+)))");
 
@@ -33,7 +37,7 @@ public class RegnalDateFromString {
     Pattern regnalPattern = Pattern.compile("((\\d+) ([a-zA-Z]+\\.?) ([A-Z]+))");
 
     // Easter
-    Pattern easterPattern = Pattern.compile("\\b[E|e]aster\\b");
+    Pattern easterPattern = Pattern.compile("(\\b[E|e]aster\\b)");
 
     // octave ... related to a feast
     Pattern octavePattern = Pattern.compile("\\boctave\\b");
@@ -78,26 +82,64 @@ public class RegnalDateFromString {
 
     public RegnalDate parse(String text) {
 
+        Matcher feastMatcher = feastRegnalPattern.matcher(text);
         Matcher easterMatcher = easterPattern.matcher(text);
         Matcher quindeneMatcher = quindenePattern.matcher(text);
         Matcher octaveMatcher = octavePattern.matcher(text);
         Matcher dayMonthMatcher = dayMonthRegnalPattern.matcher(text);
         Matcher regnalYearMatcher = regnalPattern.matcher(text);
 
-        if (easterMatcher.matches()) {
+//        System.out.println("We are in parse");
+//        System.out.println(text);
+//        System.out.println(easterMatcher.matches());
 
-            if (regnalYearMatcher.matches()) {
-                RegnalDate regnalDate = this.regnalDate(regnalYearMatcher, text);
-                String year_range = regnalDate.getYear();
-                String[] year_range_tmp = year_range.split(":");
-                String start = year_range_tmp[0];
-                String end = year_range_tmp[1];
+        if (feastMatcher.matches()) {
 
-                String[] start_tmp = start.split("-");
-                String[] end_tmp = end.split("-");
+            if (easterMatcher.find()) {
+//                System.out.println("We have easter");
 
-                if (Integer.parseInt(start_tmp[1]) > 4) {
+                if (regnalYearMatcher.find()) {
 
+                    // group (2) is the feast text
+                    String feastText = feastMatcher.group(2).trim();
+
+                    // group (4) is the regnal year
+                    String regalYearMonarch = feastMatcher.group(4);
+
+//                    System.out.println("We have a regnal year with Easter");
+                    RegnalDate regnalDate = this.regnalDate(regnalYearMatcher, text);
+//                    System.out.println(regnalDate);
+                    String year_range = regnalDate.toString();
+                    String[] year_range_tmp = year_range.split(":");
+                    String start = year_range_tmp[0];
+                    String end = year_range_tmp[1];
+
+
+                    String[] start_tmp = start.split("-");
+                    String[] end_tmp = end.split("-");
+
+                    Feast a = easterLookup.lookup(Integer.parseInt(start_tmp[0]));
+                    Feast b = easterLookup.lookup(Integer.parseInt(end_tmp[0]));
+
+                    if (octaveMatcher.find()) {
+                        if (a.getFeastOctaveDate().compareTo(LocalDate.parse(start)) > 0) {
+                            return new RegnalDate(text, feastText, regalYearMonarch, a.getFeastOctaveDate());
+                        } else {
+                            return new RegnalDate(text, feastText, regalYearMonarch, b.getFeastOctaveDate());
+                        }
+                    } else if (quindeneMatcher.find()) {
+                        if (a.getFeastQuindeneDate().compareTo(LocalDate.parse(start)) > 0) {
+                            return new RegnalDate(text, feastText, regalYearMonarch, a.getFeastQuindeneDate());
+                        } else {
+                            return new RegnalDate(text, feastText, regalYearMonarch, b.getFeastQuindeneDate());
+                        }
+                    } else {
+                        if (a.getFeastDate().compareTo(LocalDate.parse(start)) > 0) {
+                            return new RegnalDate(text, feastText, regalYearMonarch, a.getFeastDate());
+                        } else {
+                            return new RegnalDate(text, feastText, regalYearMonarch, b.getFeastDate());
+                        }
+                    }
                 }
 
             }
