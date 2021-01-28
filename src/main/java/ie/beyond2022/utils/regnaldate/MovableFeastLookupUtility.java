@@ -7,12 +7,12 @@ import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
 
-public class EasterDateLookupUtility {
+public class MovableFeastLookupUtility {
 
-    protected Map<Integer, Feast> feastLookup;
+    protected Map<Integer, MovableFeastsForYear> feastsLookup;
 
-    public EasterDateLookupUtility() throws IOException {
-        feastLookup = new HashMap<Integer, Feast>();
+    public MovableFeastLookupUtility() throws IOException {
+        feastsLookup = new HashMap<Integer, MovableFeastsForYear>();
 
         ClassLoader classLoader = getClass().getClassLoader();
         if (classLoader != null) {
@@ -24,14 +24,16 @@ public class EasterDateLookupUtility {
                     String[] tmp = line.split(":");
 
                     if (tmp.length == 9) {
-                        feastLookup.put(Integer.parseInt(tmp[0]), new Feast(tmp[1]));
+                        feastsLookup.put(Integer.parseInt(tmp[0]), new MovableFeastsForYear(new Feast(tmp[1]),
+                                new Feast(tmp[2]), new Feast(tmp[3]), new Feast(tmp[4]), new Feast(tmp[5]),
+                                new Feast(tmp[6]), new Feast(tmp[7]), new Feast(tmp[8])));
                     }
                 }
             }
         }
     }
 
-    public Feast lookup(Integer year) {
-        return feastLookup.getOrDefault(year, null);
+    public MovableFeastsForYear lookup(Integer year) {
+        return feastsLookup.getOrDefault(year, null);
     }
 }

@@ -30,8 +30,9 @@ public class EasterDateLookupTest {
 
     @Test
     public void test_1216() throws IOException {
-        EasterDateLookupUtility lookup = new EasterDateLookupUtility();
-        Feast feast = lookup.lookup(1216);
+        MovableFeastLookupUtility lookup = new MovableFeastLookupUtility();
+        MovableFeastsForYear feasts = lookup.lookup(1216);
+        Feast feast = feasts.getEaster();
         assertEquals(dateTime(1216, 4, 10), feast.getFeastDate());
         assertEquals("1216-04-10", feast.getFeastDateAsString());
         assertEquals(dateTime(1216, 4, 17), feast.getFeastOctaveDate());
@@ -43,8 +44,9 @@ public class EasterDateLookupTest {
 
     @Test
     public void test_1230() throws IOException {
-        EasterDateLookupUtility lookup = new EasterDateLookupUtility();
-        Feast feast = lookup.lookup(1230);
+        MovableFeastLookupUtility lookup = new MovableFeastLookupUtility();
+        MovableFeastsForYear feasts = lookup.lookup(1230);
+        Feast feast = feasts.getEaster();
         assertEquals(dateTime(1230, 4, 7), feast.getFeastDate());
         assertEquals("1230-04-07", feast.getFeastDateAsString());
         assertEquals(dateTime(1230, 4, 14), feast.getFeastOctaveDate());
@@ -55,8 +57,9 @@ public class EasterDateLookupTest {
 
     @Test
     public void test_1253() throws IOException {
-        EasterDateLookupUtility lookup = new EasterDateLookupUtility();
-        Feast feast = lookup.lookup(1253);
+        MovableFeastLookupUtility lookup = new MovableFeastLookupUtility();
+        MovableFeastsForYear feasts = lookup.lookup(1253);
+        Feast feast = feasts.getEaster();
         assertEquals(dateTime(1253, 4, 20), feast.getFeastDate());
         assertEquals("1253-04-20", feast.getFeastDateAsString());
         assertEquals(dateTime(1253, 4, 27), feast.getFeastOctaveDate());
@@ -67,8 +70,9 @@ public class EasterDateLookupTest {
 
     @Test
     public void test_1277() throws IOException {
-        EasterDateLookupUtility lookup = new EasterDateLookupUtility();
-        Feast feast = lookup.lookup(1277);
+        MovableFeastLookupUtility lookup = new MovableFeastLookupUtility();
+        MovableFeastsForYear feasts = lookup.lookup(1277);
+        Feast feast = feasts.getEaster();
         assertEquals(dateTime(1277, 3, 28), feast.getFeastDate());
         assertEquals("1277-03-28", feast.getFeastDateAsString());
         assertEquals(dateTime(1277, 4, 4), feast.getFeastOctaveDate());
@@ -79,8 +83,9 @@ public class EasterDateLookupTest {
 
     @Test
     public void test_1300() throws IOException {
-        EasterDateLookupUtility lookup = new EasterDateLookupUtility();
-        Feast feast = lookup.lookup(1300);
+        MovableFeastLookupUtility lookup = new MovableFeastLookupUtility();
+        MovableFeastsForYear feasts = lookup.lookup(1300);
+        Feast feast = feasts.getEaster();
         assertEquals(dateTime(1300, 4, 10), feast.getFeastDate());
         assertEquals("1300-04-10", feast.getFeastDateAsString());
         assertEquals(dateTime(1300, 4, 17), feast.getFeastOctaveDate());
@@ -91,8 +96,9 @@ public class EasterDateLookupTest {
 
     @Test
     public void test_1350() throws IOException {
-        EasterDateLookupUtility lookup = new EasterDateLookupUtility();
-        Feast feast = lookup.lookup(1350);
+        MovableFeastLookupUtility lookup = new MovableFeastLookupUtility();
+        MovableFeastsForYear feasts = lookup.lookup(1350);
+        Feast feast = feasts.getEaster();
         assertEquals(dateTime(1350, 3, 28), feast.getFeastDate());
         assertEquals("1350-03-28", feast.getFeastDateAsString());
         assertEquals(dateTime(1350, 4, 4), feast.getFeastOctaveDate());
@@ -103,8 +109,9 @@ public class EasterDateLookupTest {
 
     @Test
     public void test_1391() throws IOException {
-        EasterDateLookupUtility lookup = new EasterDateLookupUtility();
-        Feast feast = lookup.lookup(1391);
+        MovableFeastLookupUtility lookup = new MovableFeastLookupUtility();
+        MovableFeastsForYear feasts = lookup.lookup(1391);
+        Feast feast = feasts.getEaster();
         assertEquals(dateTime(1391, 3, 26), feast.getFeastDate());
         assertEquals("1391-03-26", feast.getFeastDateAsString());
         assertEquals(dateTime(1391, 4, 2), feast.getFeastOctaveDate());
@@ -115,8 +122,9 @@ public class EasterDateLookupTest {
 
     @Test
     public void test_1442() throws IOException {
-        EasterDateLookupUtility lookup = new EasterDateLookupUtility();
-        Feast feast = lookup.lookup(1442);
+        MovableFeastLookupUtility lookup = new MovableFeastLookupUtility();
+        MovableFeastsForYear feasts = lookup.lookup(1442);
+        Feast feast = feasts.getEaster();
         assertEquals(dateTime(1442, 4, 1), feast.getFeastDate());
         assertEquals("1442-04-01", feast.getFeastDateAsString());
         assertEquals(dateTime(1442, 4, 8), feast.getFeastOctaveDate());
@@ -127,8 +135,9 @@ public class EasterDateLookupTest {
 
     @Test
     public void test_1483() throws IOException {
-        EasterDateLookupUtility lookup = new EasterDateLookupUtility();
-        Feast feast = lookup.lookup(1483);
+        MovableFeastLookupUtility lookup = new MovableFeastLookupUtility();
+        MovableFeastsForYear feasts = lookup.lookup(1483);
+        Feast feast = feasts.getEaster();
         assertEquals(dateTime(1483, 3, 30), feast.getFeastDate());
         assertEquals("1483-03-30", feast.getFeastDateAsString());
         assertEquals(dateTime(1483, 4, 6), feast.getFeastOctaveDate());
@@ -140,8 +149,9 @@ public class EasterDateLookupTest {
 //    1500:1500-04-19:1500-04-26:1500-05-03
     @Test
     public void test_1500() throws IOException {
-        EasterDateLookupUtility lookup = new EasterDateLookupUtility();
-        Feast feast = lookup.lookup(1500);
+        MovableFeastLookupUtility lookup = new MovableFeastLookupUtility();
+        MovableFeastsForYear feasts = lookup.lookup(1500);
+        Feast feast = feasts.getEaster();
         assertEquals(dateTime(1500, 4, 19), feast.getFeastDate());
         assertEquals("1500-04-19", feast.getFeastDateAsString());
         assertEquals(dateTime(1500, 4, 26), feast.getFeastOctaveDate());

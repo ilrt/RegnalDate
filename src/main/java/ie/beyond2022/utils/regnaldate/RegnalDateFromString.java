@@ -102,10 +102,8 @@ public class RegnalDateFromString {
                     // group (4) is the regnal year
                     String regalYearMonarch = feastMatcher.group(4);
 
-                    Integer regnal = normalizeRegnal(regnalYearMatcher.group(2));
-                    String monarch = normalizeMonarch(regnalYearMatcher.group(3));
-                    Integer ordinal = normalizeOrdinal(regnalYearMatcher.group(4));
-                    RegnalYear regnalYear = dateFromRegnalDate.rangeForRegnalYear(regnal, monarch, ordinal);
+                    // get the date ranges for this regnal year
+                    RegnalYear regnalYear = regnalYear(regnalYearMatcher);
 
 
                     PossibleFeasts possibleFeasts = new PossibleFeasts(regnalYear.toString());
@@ -170,15 +168,19 @@ public class RegnalDateFromString {
                     monarch, ordinal);
             return new RegnalDateImpl(text, dayMonthText, regalYearMonarch, dateObj);
         } else if (regnalYearMatcher.matches()) {
-            Integer regnal = normalizeRegnal(regnalYearMatcher.group(2));
-            String monarch = normalizeMonarch(regnalYearMatcher.group(3));
-            Integer ordinal = normalizeOrdinal(regnalYearMatcher.group(4));
-            return new RegnalDateAsRangeImpl(text, dateFromRegnalDate.rangeForRegnalYear(regnal, monarch, ordinal), text);
+            RegnalYear regnalYear = regnalYear(regnalYearMatcher);
+            return new RegnalDateAsRangeImpl(text, regnalYear, text);
         } else {
             return null;
         }
     }
 
+    private RegnalYear regnalYear(Matcher matcher) {
+        Integer regnal = normalizeRegnal(matcher.group(2));
+        String monarch = normalizeMonarch(matcher.group(3));
+        Integer ordinal = normalizeOrdinal(matcher.group(4));
+        return dateFromRegnalDate.rangeForRegnalYear(regnal, monarch, ordinal);
+    }
 
     private class PossibleFeasts {
 
