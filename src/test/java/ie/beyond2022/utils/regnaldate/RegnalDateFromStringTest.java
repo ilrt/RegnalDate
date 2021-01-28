@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class RegnalDateFromStringTest {
 
@@ -17,6 +17,8 @@ public class RegnalDateFromStringTest {
         assertEquals("28 October", val.getDayMonthFeastText());
         assertEquals("1 Henry III", val.getRegnalYearMonarch());
         assertEquals("1216", val.getYear());
+        assertTrue(val.isDate());
+        assertFalse(val.isRange());
     }
 
     @Test
@@ -26,6 +28,8 @@ public class RegnalDateFromStringTest {
         assertEquals("28 Oct.", val.getDayMonthFeastText());
         assertEquals("1 Hen. III", val.getRegnalYearMonarch());
         assertEquals("1216", val.getYear());
+        assertTrue(val.isDate());
+        assertFalse(val.isRange());
     }
 
     @Test
@@ -35,6 +39,8 @@ public class RegnalDateFromStringTest {
         assertEquals("1 January", val.getDayMonthFeastText());
         assertEquals("1 Henry III", val.getRegnalYearMonarch());
         assertEquals("1217", val.getYear());
+        assertTrue(val.isDate());
+        assertFalse(val.isRange());
     }
 
     @Test
@@ -44,6 +50,8 @@ public class RegnalDateFromStringTest {
         assertEquals("1 January", val.getDayMonthFeastText());
         assertEquals("1 Hen. III", val.getRegnalYearMonarch());
         assertEquals("1217", val.getYear());
+        assertTrue(val.isDate());
+        assertFalse(val.isRange());
     }
 
     // ---------- Edward I
@@ -55,6 +63,8 @@ public class RegnalDateFromStringTest {
         assertEquals("21 November", val.getDayMonthFeastText());
         assertEquals("1 Edward I", val.getRegnalYearMonarch());
         assertEquals("1272", val.getYear());
+        assertTrue(val.isDate());
+        assertFalse(val.isRange());
     }
 
     @Test
@@ -64,6 +74,8 @@ public class RegnalDateFromStringTest {
         assertEquals("18 Nov.", val.getDayMonthFeastText());
         assertEquals("1 Edw. I", val.getRegnalYearMonarch());
         assertEquals("1273", val.getYear());
+        assertTrue(val.isDate());
+        assertFalse(val.isRange());
     }
 
     // ---------- Edward II
@@ -75,6 +87,8 @@ public class RegnalDateFromStringTest {
         assertEquals("10 July", val.getDayMonthFeastText());
         assertEquals("1 Edward II", val.getRegnalYearMonarch());
         assertEquals("1307", val.getYear());
+        assertTrue(val.isDate());
+        assertFalse(val.isRange());
     }
 
     @Test
@@ -84,6 +98,8 @@ public class RegnalDateFromStringTest {
         assertEquals("1 Jul.", val.getDayMonthFeastText());
         assertEquals("1 Edw. II", val.getRegnalYearMonarch());
         assertEquals("1308", val.getYear());
+        assertTrue(val.isDate());
+        assertFalse(val.isRange());
     }
 
     // ---------- Edward III
@@ -95,6 +111,8 @@ public class RegnalDateFromStringTest {
         assertEquals("26 January", val.getDayMonthFeastText());
         assertEquals("1 Edward III", val.getRegnalYearMonarch());
         assertEquals("1327", val.getYear());
+        assertTrue(val.isDate());
+        assertFalse(val.isRange());
     }
 
     @Test
@@ -104,6 +122,8 @@ public class RegnalDateFromStringTest {
         assertEquals("10 Jan.", val.getDayMonthFeastText());
         assertEquals("1 Edw. III", val.getRegnalYearMonarch());
         assertEquals("1328", val.getYear());
+        assertTrue(val.isDate());
+        assertFalse(val.isRange());
     }
 
     // ---------- Richard II
@@ -115,6 +135,8 @@ public class RegnalDateFromStringTest {
         assertEquals("25 June", val.getDayMonthFeastText());
         assertEquals("1 Richard II", val.getRegnalYearMonarch());
         assertEquals("1377", val.getYear());
+        assertTrue(val.isDate());
+        assertFalse(val.isRange());
     }
 
     @Test
@@ -124,6 +146,8 @@ public class RegnalDateFromStringTest {
         assertEquals("10 Jun.", val.getDayMonthFeastText());
         assertEquals("1 Ric. II", val.getRegnalYearMonarch());
         assertEquals("1378", val.getYear());
+        assertTrue(val.isDate());
+        assertFalse(val.isRange());
     }
 
     // ---------- Henry IV
@@ -135,6 +159,8 @@ public class RegnalDateFromStringTest {
         assertEquals("30 September", val.getDayMonthFeastText());
         assertEquals("1 Henry IV", val.getRegnalYearMonarch());
         assertEquals("1399", val.getYear());
+        assertTrue(val.isDate());
+        assertFalse(val.isRange());
     }
 
     @Test
@@ -144,6 +170,8 @@ public class RegnalDateFromStringTest {
         assertEquals("29 Sep.", val.getDayMonthFeastText());
         assertEquals("1 Hen. IV", val.getRegnalYearMonarch());
         assertEquals("1400", val.getYear());
+        assertTrue(val.isDate());
+        assertFalse(val.isRange());
     }
 
     // ---------- Henry V
@@ -155,6 +183,8 @@ public class RegnalDateFromStringTest {
         assertEquals("21 March", val.getDayMonthFeastText());
         assertEquals("1 Henry V", val.getRegnalYearMonarch());
         assertEquals("1413", val.getYear());
+        assertTrue(val.isDate());
+        assertFalse(val.isRange());
     }
 
     @Test
@@ -164,6 +194,8 @@ public class RegnalDateFromStringTest {
         assertEquals("20 March", val.getDayMonthFeastText());
         assertEquals("1 Henry V", val.getRegnalYearMonarch());
         assertEquals("1414", val.getYear());
+        assertTrue(val.isDate());
+        assertFalse(val.isRange());
     }
 
     // ---------- Henry VI
@@ -175,6 +207,8 @@ public class RegnalDateFromStringTest {
         assertEquals("1 September", val.getDayMonthFeastText());
         assertEquals("1 Henry VI", val.getRegnalYearMonarch());
         assertEquals("1422", val.getYear());
+        assertTrue(val.isDate());
+        assertFalse(val.isRange());
     }
 
     @Test
@@ -184,6 +218,8 @@ public class RegnalDateFromStringTest {
         assertEquals("31 Aug.", val.getDayMonthFeastText());
         assertEquals("1 Henry VI", val.getRegnalYearMonarch());
         assertEquals("1423", val.getYear());
+        assertTrue(val.isDate());
+        assertFalse(val.isRange());
     }
 
     @Test
@@ -193,6 +229,8 @@ public class RegnalDateFromStringTest {
         assertEquals("10 October", val.getDayMonthFeastText());
         assertEquals("49 Henry VI", val.getRegnalYearMonarch());
         assertEquals("1470", val.getYear());
+        assertTrue(val.isDate());
+        assertFalse(val.isRange());
     }
 
     @Test
@@ -202,6 +240,8 @@ public class RegnalDateFromStringTest {
         assertEquals("12 Jan.", val.getDayMonthFeastText());
         assertEquals("49 Hen. VI", val.getRegnalYearMonarch());
         assertEquals("1471", val.getYear());
+        assertTrue(val.isDate());
+        assertFalse(val.isRange());
     }
 
     // ---------- Edward IV
@@ -213,6 +253,8 @@ public class RegnalDateFromStringTest {
         assertEquals("4 March", val.getDayMonthFeastText());
         assertEquals("1 Edward IV", val.getRegnalYearMonarch());
         assertEquals("1461", val.getYear());
+        assertTrue(val.isDate());
+        assertFalse(val.isRange());
     }
 
     @Test
@@ -222,6 +264,8 @@ public class RegnalDateFromStringTest {
         assertEquals("1 Mar.", val.getDayMonthFeastText());
         assertEquals("1 Edw. IV", val.getRegnalYearMonarch());
         assertEquals("1462", val.getYear());
+        assertTrue(val.isDate());
+        assertFalse(val.isRange());
     }
 
     // ---------- Edward V
@@ -233,6 +277,8 @@ public class RegnalDateFromStringTest {
         assertEquals("10 May", val.getDayMonthFeastText());
         assertEquals("1 Edward V", val.getRegnalYearMonarch());
         assertEquals("1483", val.getYear());
+        assertTrue(val.isDate());
+        assertFalse(val.isRange());
     }
 
     // ---------- Richard III
@@ -244,6 +290,8 @@ public class RegnalDateFromStringTest {
         assertEquals("26 Jun.", val.getDayMonthFeastText());
         assertEquals("1 Rich. III", val.getRegnalYearMonarch());
         assertEquals("1483", val.getYear());
+        assertTrue(val.isDate());
+        assertFalse(val.isRange());
     }
 
     @Test
@@ -253,6 +301,8 @@ public class RegnalDateFromStringTest {
         assertEquals("20 Jun.", val.getDayMonthFeastText());
         assertEquals("1 Rich. III", val.getRegnalYearMonarch());
         assertEquals("1484", val.getYear());
+        assertTrue(val.isDate());
+        assertFalse(val.isRange());
     }
 
 
@@ -265,6 +315,8 @@ public class RegnalDateFromStringTest {
         assertEquals("22 August", val.getDayMonthFeastText());
         assertEquals("1 Henry VII", val.getRegnalYearMonarch());
         assertEquals("1485", val.getYear());
+        assertTrue(val.isDate());
+        assertFalse(val.isRange());
     }
 
     @Test
@@ -274,6 +326,8 @@ public class RegnalDateFromStringTest {
         assertEquals("21 Aug.", val.getDayMonthFeastText());
         assertEquals("1 Hen. VII", val.getRegnalYearMonarch());
         assertEquals("1486", val.getYear());
+        assertTrue(val.isDate());
+        assertFalse(val.isRange());
     }
 
 }

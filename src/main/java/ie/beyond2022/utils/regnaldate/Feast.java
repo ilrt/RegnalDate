@@ -1,44 +1,47 @@
 package ie.beyond2022.utils.regnaldate;
 
+import org.joda.time.DateTime;
+import org.joda.time.chrono.GJChronology;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
+
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 
 public class Feast {
 
-    private final LocalDate feastDate;
-    private final LocalDate feastOctaveDate;
-    private final LocalDate feastQuindeneDate;
+    private final DateTime feastDate;
+    private final DateTime feastOctaveDate;
+    private final DateTime feastQuindeneDate;
 
-    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+    DateTimeFormatter formatter = DateTimeFormat.forPattern("yyyy-MM-dd").withChronology(GJChronology.getInstance());
 
-    public Feast(final String feastDate, final String feastOctaveDate, final String feastQuindeneDate) {
-
-        this.feastDate = LocalDate.parse(feastDate, formatter);
-        this.feastOctaveDate = LocalDate.parse(feastOctaveDate, formatter);
-        this.feastQuindeneDate = LocalDate.parse(feastQuindeneDate, formatter);
+    public Feast(final String feastDate) {
+        this.feastDate = formatter.parseDateTime(feastDate);
+        this.feastOctaveDate = this.feastDate.plusDays(7);
+        this.feastQuindeneDate = this.feastDate.plusDays(14);
     }
 
-    public LocalDate getFeastDate() {
+    public DateTime getFeastDate() {
         return feastDate;
     }
 
     public String getFeastDateAsString() {
-        return feastDate.format(formatter);
+        return feastDate.toString(formatter);
     }
 
-    public LocalDate getFeastOctaveDate() {
+    public DateTime getFeastOctaveDate() {
         return feastOctaveDate;
     }
 
     public String getFeastOctaveDateAsString() {
-        return feastOctaveDate.format(formatter);
+        return feastOctaveDate.toString(formatter);
     }
 
-    public LocalDate getFeastQuindeneDate() {
+    public DateTime getFeastQuindeneDate() {
         return feastQuindeneDate;
     }
 
     public String getFeastQuindeneDateAsString() {
-        return feastQuindeneDate.format(formatter);
+        return feastQuindeneDate.toString(formatter);
     }
 }

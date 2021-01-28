@@ -704,10 +704,28 @@ public class RegnalDateFromStringWithEasterTest {
     }
 
     @Test
+    public void test_easter_octave_2_Henry_VII() throws IOException {
+        RegnalDate val = RegnalDate.parseString("Octave of Easter 1 Henry VII");
+        assertEquals("1486-04-02", val.toString());
+        assertEquals("Octave of Easter", val.getDayMonthFeastText());
+        assertEquals("1 Henry VII", val.getRegnalYearMonarch());
+        assertEquals("1486", val.getYear());
+    }
+
+    @Test
     public void test_easter_quindene_1_Henry_VII() throws IOException {
         RegnalDate val = RegnalDate.parseString("quindene of Easter 1 Henry VII");
         assertEquals("1486-04-09", val.toString());
         assertEquals("quindene of Easter", val.getDayMonthFeastText());
+        assertEquals("1 Henry VII", val.getRegnalYearMonarch());
+        assertEquals("1486", val.getYear());
+    }
+
+    @Test
+    public void test_easter_quindene_1_Henry_VII_2() throws IOException {
+        RegnalDate val = RegnalDate.parseString("Quindene of Easter 1 Henry VII");
+        assertEquals("1486-04-09", val.toString());
+        assertEquals("Quindene of Easter", val.getDayMonthFeastText());
         assertEquals("1 Henry VII", val.getRegnalYearMonarch());
         assertEquals("1486", val.getYear());
     }

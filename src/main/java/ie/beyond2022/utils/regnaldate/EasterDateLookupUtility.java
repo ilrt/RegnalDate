@@ -24,7 +24,7 @@ public class EasterDateLookupUtility {
                     String[] tmp = line.split(":");
 
                     if (tmp.length == 4) {
-                        feastLookup.put(Integer.parseInt(tmp[0]), new Feast(tmp[1], tmp[2], tmp[3]));
+                        feastLookup.put(Integer.parseInt(tmp[0]), new Feast(tmp[1]));
                     }
                 }
             }
