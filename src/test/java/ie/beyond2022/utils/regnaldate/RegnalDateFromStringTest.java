@@ -330,4 +330,16 @@ public class RegnalDateFromStringTest {
         assertFalse(val.isRange());
     }
 
+
+    // --------- Tests strings used in plugin
+    @Test
+    public  void test_plugin_text_1() throws IOException {
+        RegnalDate val = RegnalDate.parseString("quindene of Easter 3 Edward III");
+        assertNotNull(val);
+        assertEquals("1329-05-07", val.toString());
+        assertEquals("quindene of Easter", val.getDayMonthFeastText());
+        assertEquals("3 Edward III", val.getRegnalYearMonarch());
+        assertEquals("1329", val.getYear());
+    }
+
 }

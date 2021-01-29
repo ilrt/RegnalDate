@@ -20,7 +20,7 @@ import java.util.stream.Stream;
 public class RegnalDateFromString {
 
     DateFromRegnalDate dateFromRegnalDate = new DateFromRegnalDate();
-    EasterDateLookupUtility easterLookup = new EasterDateLookupUtility();
+    MovableFeastLookupUtility movableFeastLookup = new MovableFeastLookupUtility();
 
     Map<String, Integer> months = Stream.of(new Object[][]{
             {"jan", 1}, {"feb", 2}, {"mar", 3}, {"apr", 4}, {"may", 5}, {"jun", 6},
@@ -32,7 +32,7 @@ public class RegnalDateFromString {
     }).collect(Collectors.toMap(data -> (String) data[0], data -> (Integer) data[1]));
 
     // regnal year, with a feast
-    Pattern feastRegnalPattern = Pattern.compile("((([a-zA-Z]+ )+)((\\d+) ([a-zA-Z]+\\.?) ([A-Z]+)))");
+    Pattern feastRegnalPattern = Pattern.compile("((([a-zA-Z\\-]+ )+)((\\d+) ([a-zA-Z]+\\.?) ([A-Z]+)))");
 
     // regnal year, with a day amd month, e.g. 4 June 3 Henry III
     Pattern dayMonthRegnalPattern = Pattern.compile("(((\\d+) ([a-zA-Z]+\\.?)) ((\\d+) ([a-zA-Z]+\\.?) ([A-Z]+)))");
@@ -41,15 +41,34 @@ public class RegnalDateFromString {
     Pattern regnalPattern = Pattern.compile("((\\d+) ([a-zA-Z]+\\.?) ([A-Z]+))");
 
     // Easter
-    Pattern easterPattern = Pattern.compile("(\\b[E|e]aster\\b)");
+    Pattern easterPattern = Pattern.compile("(\\beaster\\b)", Pattern.CASE_INSENSITIVE);
 
     // octave ... related to a feast
-    Pattern octavePattern = Pattern.compile("\\b[O|o]ctave\\b");
+    Pattern octavePattern = Pattern.compile("\\boctave\\b", Pattern.CASE_INSENSITIVE);
 
     // quindene ... related to a feast
-    Pattern quindenePattern = Pattern.compile("\\b[Q|q]uindene\\b");
+    Pattern quindenePattern = Pattern.compile("\\bquindene\\b", Pattern.CASE_INSENSITIVE);
 
-    Pattern quinquageisimaPattern = Pattern.compile("\\b[Q|q]uinquageisima\\b");
+    // quinquageisima
+    Pattern quinquageisimaPattern = Pattern.compile("\\bquinquageisima\\b", Pattern.CASE_INSENSITIVE);
+
+    // quadrageisma
+    Pattern quadrageismaPattern = Pattern.compile("\\bquadrageisma\\b", Pattern.CASE_INSENSITIVE);
+
+    // rogation
+    Pattern rogationPattern = Pattern.compile("\\brogation\\b", Pattern.CASE_INSENSITIVE);
+
+    // ascension
+    Pattern ascensionPattern = Pattern.compile("\\bascension\\b", Pattern.CASE_INSENSITIVE);
+
+    // penticost
+    Pattern penticostPattern = Pattern.compile("penticost|whitsun|whit[ |\\-]sunday", Pattern.CASE_INSENSITIVE);
+
+    // trinity
+    Pattern trinityPattern = Pattern.compile("\\btrinity\\b", Pattern.CASE_INSENSITIVE);
+
+    // corpus christi
+    Pattern corpusChristi = Pattern.compile("\\bcorpus christi\\b", Pattern.CASE_INSENSITIVE);
 
     public RegnalDateFromString() throws IOException {
     }
@@ -80,6 +99,17 @@ public class RegnalDateFromString {
         return new RegnalDateImpl(text, regalYearMonarch, regnalYear.getRegnalYearStartAsString(), regnalYear.getRegnalYearEndAsString());
     }
 
+    boolean contains(String text, Pattern pattern) {
+        return pattern.matcher(text).find();
+    }
+
+    boolean isMovableFeast(String text) {
+        return contains(text, easterPattern) || contains(text, quinquageisimaPattern) ||
+                contains(text, quadrageismaPattern) || contains(text, rogationPattern) ||
+                contains(text, ascensionPattern) || contains(text, penticostPattern) ||
+                contains(text, trinityPattern) || contains(text, corpusChristi);
+    }
+
     public RegnalDate parse(String text) {
 
         Matcher feastMatcher = feastRegnalPattern.matcher(text);
@@ -92,7 +122,7 @@ public class RegnalDateFromString {
 
         if (feastMatcher.matches()) {
 
-            if (easterMatcher.find()) {
+            if (isMovableFeast(text)) {
 
                 if (regnalYearMatcher.find()) {
 
@@ -105,37 +135,62 @@ public class RegnalDateFromString {
                     // get the date ranges for this regnal year
                     RegnalYear regnalYear = regnalYear(regnalYearMatcher);
 
+                    Feast a = null;
+                    Feast b = null;
 
                     PossibleFeasts possibleFeasts = new PossibleFeasts(regnalYear.toString());
-                    Feast a = possibleFeasts.getA();
-                    Feast b = possibleFeasts.getB();
 
-                    // octave?
-                    if (octaveMatcher.find()) {
-                        if (a.getFeastOctaveDate().compareTo(possibleFeasts.startDate()) > 0) {
-                            return new RegnalDateImpl(text, feastText, regalYearMonarch, a.getFeastOctaveDate());
+                    if (contains(text, easterPattern)) {
+                        a = possibleFeasts.getA().getEaster();
+                        b = possibleFeasts.getB().getEaster();
+                    } else if (contains(text, quinquageisimaPattern)) {
+                        a = possibleFeasts.getA().getQuinquageisima();
+                        b = possibleFeasts.getB().getQuinquageisima();
+                    } else if (contains(text, quadrageismaPattern)) {
+                        a = possibleFeasts.getA().getQuadrageisma();
+                        b = possibleFeasts.getB().getQuadrageisma();
+                    } else if (contains(text, rogationPattern)) {
+                        a = possibleFeasts.getA().getRogation();
+                        b = possibleFeasts.getB().getRogation();
+                    } else if (contains(text, ascensionPattern)) {
+                        a = possibleFeasts.getA().getAscension();
+                        b = possibleFeasts.getB().getAscension();
+                    } else if (contains(text, penticostPattern)) {
+                        a = possibleFeasts.getA().getPentecost();
+                        b = possibleFeasts.getB().getPentecost();
+                    } else if (contains(text, trinityPattern)) {
+                        a = possibleFeasts.getA().getTrinity();
+                        b = possibleFeasts.getB().getTrinity();
+                    } else if (contains(text, corpusChristi)) {
+                        a = possibleFeasts.getA().getCorpus_christi();
+                        b = possibleFeasts.getB().getCorpus_christi();
+                    }
+
+                    if (a != null && b != null) {
+                        // octave?
+                        if (octaveMatcher.find()) {
+                            if (a.getFeastOctaveDate().compareTo(possibleFeasts.startDate()) > 0) {
+                                return new RegnalDateImpl(text, feastText, regalYearMonarch, a.getFeastOctaveDate());
+                            } else {
+                                return new RegnalDateImpl(text, feastText, regalYearMonarch, b.getFeastOctaveDate());
+                            }
+                            // quindene?
+                        } else if (quindeneMatcher.find()) {
+                            if (a.getFeastQuindeneDate().compareTo(possibleFeasts.startDate()) > 0) {
+                                return new RegnalDateImpl(text, feastText, regalYearMonarch, a.getFeastQuindeneDate());
+                            } else {
+                                return new RegnalDateImpl(text, feastText, regalYearMonarch, b.getFeastQuindeneDate());
+                            }
+                            // default to the feast
                         } else {
-                            return new RegnalDateImpl(text, feastText, regalYearMonarch, b.getFeastOctaveDate());
-                        }
-                        // quindene?
-                    } else if (quindeneMatcher.find()) {
-                        if (a.getFeastQuindeneDate().compareTo(possibleFeasts.startDate()) > 0) {
-                            return new RegnalDateImpl(text, feastText, regalYearMonarch, a.getFeastQuindeneDate());
-                        } else {
-                            return new RegnalDateImpl(text, feastText, regalYearMonarch, b.getFeastQuindeneDate());
-                        }
-                        // default to the feast
-                    } else {
-                        if (a.getFeastDate().compareTo(possibleFeasts.startDate()) > 0) {
-                            return new RegnalDateImpl(text, feastText, regalYearMonarch, a.getFeastDate());
-                        } else {
-                            return new RegnalDateImpl(text, feastText, regalYearMonarch, b.getFeastDate());
+                            if (a.getFeastDate().compareTo(possibleFeasts.startDate()) > 0) {
+                                return new RegnalDateImpl(text, feastText, regalYearMonarch, a.getFeastDate());
+                            } else {
+                                return new RegnalDateImpl(text, feastText, regalYearMonarch, b.getFeastDate());
+                            }
                         }
                     }
-                } else if (quinquageisimaMatcher.find()) {
-
                 }
-
 
             }
             return null; // default return null
@@ -187,8 +242,8 @@ public class RegnalDateFromString {
         DateTimeFormatter formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
                 .withChronology(GJChronology.getInstance());
 
-        Feast a;
-        Feast b;
+        MovableFeastsForYear a;
+        MovableFeastsForYear b;
         DateTime startDate;
         DateTime endDate;
 
@@ -198,19 +253,19 @@ public class RegnalDateFromString {
             startDate =  formatter.parseDateTime(start);
             String end = year_range_tmp[1];
             endDate = formatter.parseDateTime(end);
-            a = easterLookup.lookup(startDate.getYear());
-            b = easterLookup.lookup(endDate.getYear());
+            a = movableFeastLookup.lookup(startDate.getYear());
+            b = movableFeastLookup.lookup(endDate.getYear());
         }
 
         public DateTime startDate() {
             return startDate;
         }
 
-        public Feast getA() {
+        public MovableFeastsForYear getA() {
             return a;
         }
 
-        public Feast getB() {
+        public MovableFeastsForYear getB() {
             return b;
         }
     }

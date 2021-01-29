@@ -6,7 +6,6 @@ import org.joda.time.chrono.GJChronology;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
-import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -21,8 +20,8 @@ public class EasterDateLookupTest {
     @Test
     public void testKeyNumber() throws IOException {
         // Test we loaded the correct number of years
-        EasterDateLookupUtility lookup = new EasterDateLookupUtility();
-        assertEquals(294, lookup.feastLookup.keySet().size());
+        MovableFeastLookupUtility lookup = new MovableFeastLookupUtility();
+        assertEquals(294, lookup.feastsLookup.keySet().size());
     }
 
     // ---------- The following tests check a snapshot of years
