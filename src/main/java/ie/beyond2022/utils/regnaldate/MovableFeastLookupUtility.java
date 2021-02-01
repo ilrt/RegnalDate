@@ -16,7 +16,7 @@ public class MovableFeastLookupUtility {
 
         ClassLoader classLoader = getClass().getClassLoader();
         if (classLoader != null) {
-            InputStream is = classLoader.getResourceAsStream("easter.txt");
+            InputStream is = classLoader.getResourceAsStream("moveable_feasts.txt");
             if (is != null) {
                 BufferedReader reader = new BufferedReader(new InputStreamReader(is));
                 while (reader.ready()) {
