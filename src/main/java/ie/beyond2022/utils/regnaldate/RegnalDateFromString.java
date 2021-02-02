@@ -21,6 +21,7 @@ public class RegnalDateFromString {
 
     DateFromRegnalDate dateFromRegnalDate = new DateFromRegnalDate();
     MovableFeastLookupUtility movableFeastLookup = new MovableFeastLookupUtility();
+    FixedFeastLookupUtility fixedFeastLookup = new FixedFeastLookupUtility();
 
     Map<String, Integer> months = Stream.of(new Object[][]{
             {"jan", 1}, {"feb", 2}, {"mar", 3}, {"apr", 4}, {"may", 5}, {"jun", 6},
@@ -122,21 +123,22 @@ public class RegnalDateFromString {
 
         if (feastMatcher.matches()) {
 
-            if (isMovableFeast(text)) {
+            Feast a = null;
+            Feast b = null;
 
-                if (regnalYearMatcher.find()) {
+            if (regnalYearMatcher.find()) {
 
-                    // group (2) is the feast text
-                    String feastText = feastMatcher.group(2).trim();
+                // group (2) is the feast text
+                String feastText = feastMatcher.group(2).trim();
 
-                    // group (4) is the regnal year
-                    String regalYearMonarch = feastMatcher.group(4);
+                // group (4) is the regnal year
+                String regalYearMonarch = feastMatcher.group(4);
 
-                    // get the date ranges for this regnal year
-                    RegnalYear regnalYear = regnalYear(regnalYearMatcher);
+                // get the date ranges for this regnal year
+                RegnalYear regnalYear = regnalYear(regnalYearMatcher);
 
-                    Feast a = null;
-                    Feast b = null;
+                if (isMovableFeast(text)) {
+
 
                     PossibleFeasts possibleFeasts = new PossibleFeasts(regnalYear.toString());
 
@@ -190,7 +192,40 @@ public class RegnalDateFromString {
                             }
                         }
                     }
+
+                } else {
+
+                    String monthDay = fixedFeastLookup.lookup(feastText);
+                    String yearA = regnalYear.getRegnalYearStart().getYear() + "-" + monthDay;
+                    String yearB = regnalYear.getRegnalYearEnd().getYear() + "-" + monthDay;
+                    a = new Feast(yearA);
+                    b = new Feast(yearB);
+
+                    // octave?
+                    if (octaveMatcher.find()) {
+                        if (a.getFeastOctaveDate().compareTo(regnalYear.getRegnalYearStart()) > 0) {
+                            return new RegnalDateImpl(text, feastText, regalYearMonarch, a.getFeastOctaveDate());
+                        } else {
+                            return new RegnalDateImpl(text, feastText, regalYearMonarch, b.getFeastOctaveDate());
+                        }
+                        // quindene?
+                    } else if (quindeneMatcher.find()) {
+                        if (a.getFeastQuindeneDate().compareTo(regnalYear.getRegnalYearStart()) > 0) {
+                            return new RegnalDateImpl(text, feastText, regalYearMonarch, a.getFeastQuindeneDate());
+                        } else {
+                            return new RegnalDateImpl(text, feastText, regalYearMonarch, b.getFeastQuindeneDate());
+                        }
+                        // default to the feast
+                    } else {
+                        if (a.getFeastDate().compareTo(regnalYear.getRegnalYearStart()) > 0) {
+                            return new RegnalDateImpl(text, feastText, regalYearMonarch, a.getFeastDate());
+                        } else {
+                            return new RegnalDateImpl(text, feastText, regalYearMonarch, b.getFeastDate());
+                        }
+                    }
+
                 }
+
 
             }
             return null; // default return null
@@ -237,6 +272,7 @@ public class RegnalDateFromString {
         return dateFromRegnalDate.rangeForRegnalYear(regnal, monarch, ordinal);
     }
 
+
     private class PossibleFeasts {
 
         DateTimeFormatter formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
@@ -250,7 +286,7 @@ public class RegnalDateFromString {
         public PossibleFeasts(String regnal_date_range) {
             String[] year_range_tmp = regnal_date_range.split(":");
             String start = year_range_tmp[0];
-            startDate =  formatter.parseDateTime(start);
+            startDate = formatter.parseDateTime(start);
             String end = year_range_tmp[1];
             endDate = formatter.parseDateTime(end);
             a = movableFeastLookup.lookup(startDate.getYear());
