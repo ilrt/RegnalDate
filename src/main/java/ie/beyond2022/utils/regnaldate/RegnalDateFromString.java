@@ -6,6 +6,8 @@ import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
 import java.io.IOException;
+import java.util.Date;
+import java.util.Locale;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -18,6 +20,8 @@ import java.util.stream.Stream;
  * range in 'YYYY-MM-DD:YYYY-MM-DD' format.
  */
 public class RegnalDateFromString {
+
+    DateTimeFormatter formatter = DateTimeFormat.forPattern("yyyy-MM-dd").withChronology(GJChronology.getInstance());
 
     DateFromRegnalDate dateFromRegnalDate = new DateFromRegnalDate();
     MovableFeastLookupUtility movableFeastLookup = new MovableFeastLookupUtility();
@@ -53,8 +57,20 @@ public class RegnalDateFromString {
     // quinquageisima
     Pattern quinquageisimaPattern = Pattern.compile("\\bquinquageisima\\b", Pattern.CASE_INSENSITIVE);
 
+    // shrove tuesday
+    Pattern shroveTuesdayPattern = Pattern.compile("\\bshrove tuesday\\b", Pattern.CASE_INSENSITIVE);
+
+    // ash wednesday
+    Pattern ashWednesdayPattern = Pattern.compile("\\bash wednesday\\b", Pattern.CASE_INSENSITIVE);
+
     // quadrageisma
     Pattern quadrageismaPattern = Pattern.compile("\\bquadrageisma\\b", Pattern.CASE_INSENSITIVE);
+
+    // palm sunday
+    Pattern palmSundayPattern = Pattern.compile("\\bpalm sunday\\b", Pattern.CASE_INSENSITIVE);
+
+    // good friday
+    Pattern goodFridayPattern = Pattern.compile("\\bgood friday\\b", Pattern.CASE_INSENSITIVE);
 
     // rogation
     Pattern rogationPattern = Pattern.compile("\\brogation\\b", Pattern.CASE_INSENSITIVE);
@@ -70,6 +86,10 @@ public class RegnalDateFromString {
 
     // corpus christi
     Pattern corpusChristi = Pattern.compile("\\bcorpus christi\\b", Pattern.CASE_INSENSITIVE);
+
+    Pattern morrowPattern = Pattern.compile("\\bmorrow\\b");
+
+    Pattern evePattern = Pattern.compile("\\beve\\b", Pattern.CASE_INSENSITIVE);
 
     public RegnalDateFromString() throws IOException {
     }
@@ -97,7 +117,8 @@ public class RegnalDateFromString {
 
         RegnalYear regnalYear = dateFromRegnalDate.rangeForRegnalYear(regnal, monarch, ordinal);
 
-        return new RegnalDateImpl(text, regalYearMonarch, regnalYear.getRegnalYearStartAsString(), regnalYear.getRegnalYearEndAsString());
+        return new RegnalDateImpl(text, regalYearMonarch, regnalYear.getRegnalYearStartAsString(),
+                formatter.parseDateTime(regnalYear.getRegnalYearEndAsString()));
     }
 
     boolean contains(String text, Pattern pattern) {
@@ -106,9 +127,28 @@ public class RegnalDateFromString {
 
     boolean isMovableFeast(String text) {
         return contains(text, easterPattern) || contains(text, quinquageisimaPattern) ||
-                contains(text, quadrageismaPattern) || contains(text, rogationPattern) ||
+                contains(text, shroveTuesdayPattern) || contains(text, ashWednesdayPattern) ||
+                contains(text, quadrageismaPattern) || contains(text, palmSundayPattern) ||
+                contains(text, goodFridayPattern) || contains(text, rogationPattern) ||
                 contains(text, ascensionPattern) || contains(text, penticostPattern) ||
                 contains(text, trinityPattern) || contains(text, corpusChristi);
+    }
+
+    RegnalDate morrowOrEve(RegnalDate regnalDate) {
+
+        if (regnalDate instanceof RegnalDateImpl) {
+
+            if (contains(regnalDate.getDayMonthFeastText(), morrowPattern)) {
+                DateTime morrow = formatter.parseDateTime(regnalDate.toString()).plusDays(1);
+                return new RegnalDateImpl(regnalDate.getOriginalText(), regnalDate.getDayMonthFeastText(),
+                        regnalDate.getRegnalYearMonarch(), morrow);
+            } else if (contains(regnalDate.getDayMonthFeastText(), evePattern)) {
+                DateTime eve = formatter.parseDateTime(regnalDate.toString()).minusDays(1);
+                return new RegnalDateImpl(regnalDate.getOriginalText(), regnalDate.getDayMonthFeastText(),
+                        regnalDate.getRegnalYearMonarch(), eve);
+            }
+        }
+        return regnalDate;
     }
 
     public RegnalDate parse(String text) {
@@ -120,6 +160,8 @@ public class RegnalDateFromString {
         Matcher dayMonthMatcher = dayMonthRegnalPattern.matcher(text);
         Matcher regnalYearMatcher = regnalPattern.matcher(text);
         Matcher quinquageisimaMatcher = quinquageisimaPattern.matcher(text);
+
+        RegnalDate regnalDate = null;
 
         if (feastMatcher.matches()) {
 
@@ -148,9 +190,21 @@ public class RegnalDateFromString {
                     } else if (contains(text, quinquageisimaPattern)) {
                         a = possibleFeasts.getA().getQuinquageisima();
                         b = possibleFeasts.getB().getQuinquageisima();
+                    } else if (contains(text, shroveTuesdayPattern)) {
+                        a = possibleFeasts.getA().getShrove_Tuesday();
+                        b = possibleFeasts.getB().getShrove_Tuesday();
+                    } else if (contains(text, ashWednesdayPattern)) {
+                        a = possibleFeasts.getA().getAsh_wednesday();
+                        b = possibleFeasts.getB().getAsh_wednesday();
                     } else if (contains(text, quadrageismaPattern)) {
                         a = possibleFeasts.getA().getQuadrageisma();
                         b = possibleFeasts.getB().getQuadrageisma();
+                    } else if (contains(text, palmSundayPattern)) {
+                        a = possibleFeasts.getA().getPalm_sunday();
+                        b = possibleFeasts.getB().getPalm_sunday();
+                    } else if (contains(text, goodFridayPattern)) {
+                        a = possibleFeasts.getA().getGood_friday();
+                        b = possibleFeasts.getB().getGood_friday();
                     } else if (contains(text, rogationPattern)) {
                         a = possibleFeasts.getA().getRogation();
                         b = possibleFeasts.getB().getRogation();
@@ -172,23 +226,23 @@ public class RegnalDateFromString {
                         // octave?
                         if (octaveMatcher.find()) {
                             if (a.getFeastOctaveDate().compareTo(possibleFeasts.startDate()) > 0) {
-                                return new RegnalDateImpl(text, feastText, regalYearMonarch, a.getFeastOctaveDate());
+                                regnalDate = new RegnalDateImpl(text, feastText, regalYearMonarch, a.getFeastOctaveDate());
                             } else {
-                                return new RegnalDateImpl(text, feastText, regalYearMonarch, b.getFeastOctaveDate());
+                                regnalDate = new RegnalDateImpl(text, feastText, regalYearMonarch, b.getFeastOctaveDate());
                             }
                             // quindene?
                         } else if (quindeneMatcher.find()) {
                             if (a.getFeastQuindeneDate().compareTo(possibleFeasts.startDate()) > 0) {
-                                return new RegnalDateImpl(text, feastText, regalYearMonarch, a.getFeastQuindeneDate());
+                                regnalDate = new RegnalDateImpl(text, feastText, regalYearMonarch, a.getFeastQuindeneDate());
                             } else {
-                                return new RegnalDateImpl(text, feastText, regalYearMonarch, b.getFeastQuindeneDate());
+                                regnalDate = new RegnalDateImpl(text, feastText, regalYearMonarch, b.getFeastQuindeneDate());
                             }
                             // default to the feast
                         } else {
                             if (a.getFeastDate().compareTo(possibleFeasts.startDate()) > 0) {
-                                return new RegnalDateImpl(text, feastText, regalYearMonarch, a.getFeastDate());
+                                regnalDate = new RegnalDateImpl(text, feastText, regalYearMonarch, a.getFeastDate());
                             } else {
-                                return new RegnalDateImpl(text, feastText, regalYearMonarch, b.getFeastDate());
+                                regnalDate = new RegnalDateImpl(text, feastText, regalYearMonarch, b.getFeastDate());
                             }
                         }
                     }
@@ -196,6 +250,11 @@ public class RegnalDateFromString {
                 } else {
 
                     String monthDay = fixedFeastLookup.lookup(feastText);
+
+                    if (monthDay == null) {
+                        return null;
+                    }
+
                     String yearA = regnalYear.getRegnalYearStart().getYear() + "-" + monthDay;
                     String yearB = regnalYear.getRegnalYearEnd().getYear() + "-" + monthDay;
                     a = new Feast(yearA);
@@ -204,31 +263,29 @@ public class RegnalDateFromString {
                     // octave?
                     if (octaveMatcher.find()) {
                         if (a.getFeastOctaveDate().compareTo(regnalYear.getRegnalYearStart()) > 0) {
-                            return new RegnalDateImpl(text, feastText, regalYearMonarch, a.getFeastOctaveDate());
+                            regnalDate = new RegnalDateImpl(text, feastText, regalYearMonarch, a.getFeastOctaveDate());
                         } else {
-                            return new RegnalDateImpl(text, feastText, regalYearMonarch, b.getFeastOctaveDate());
+                            regnalDate = new RegnalDateImpl(text, feastText, regalYearMonarch, b.getFeastOctaveDate());
                         }
                         // quindene?
                     } else if (quindeneMatcher.find()) {
                         if (a.getFeastQuindeneDate().compareTo(regnalYear.getRegnalYearStart()) > 0) {
-                            return new RegnalDateImpl(text, feastText, regalYearMonarch, a.getFeastQuindeneDate());
+                            regnalDate = new RegnalDateImpl(text, feastText, regalYearMonarch, a.getFeastQuindeneDate());
                         } else {
-                            return new RegnalDateImpl(text, feastText, regalYearMonarch, b.getFeastQuindeneDate());
+                            regnalDate = new RegnalDateImpl(text, feastText, regalYearMonarch, b.getFeastQuindeneDate());
                         }
                         // default to the feast
                     } else {
                         if (a.getFeastDate().compareTo(regnalYear.getRegnalYearStart()) > 0) {
-                            return new RegnalDateImpl(text, feastText, regalYearMonarch, a.getFeastDate());
+                            regnalDate = new RegnalDateImpl(text, feastText, regalYearMonarch, a.getFeastDate());
                         } else {
-                            return new RegnalDateImpl(text, feastText, regalYearMonarch, b.getFeastDate());
+                            regnalDate = new RegnalDateImpl(text, feastText, regalYearMonarch, b.getFeastDate());
                         }
                     }
-
                 }
 
-
             }
-            return null; // default return null
+
         } else if (dayMonthMatcher.matches()) {
 
             // group 2 has the day + month, while group 5 has the regnal year, monarch and their ordinal number
@@ -256,13 +313,18 @@ public class RegnalDateFromString {
 
             DateTime dateObj = dateFromRegnalDate.dateFromRegnal(Integer.parseInt(date), month_val, regnal,
                     monarch, ordinal);
-            return new RegnalDateImpl(text, dayMonthText, regalYearMonarch, dateObj);
+            regnalDate = new RegnalDateImpl(text, dayMonthText, regalYearMonarch, dateObj);
         } else if (regnalYearMatcher.matches()) {
             RegnalYear regnalYear = regnalYear(regnalYearMatcher);
             return new RegnalDateAsRangeImpl(text, regnalYear, text);
-        } else {
-            return null;
         }
+
+        // adjust if morrow or eve
+        if (regnalDate != null && (contains(text, morrowPattern) || contains(text, evePattern))) {
+            regnalDate =  morrowOrEve(regnalDate);
+        }
+
+        return regnalDate;
     }
 
     private RegnalYear regnalYear(Matcher matcher) {
@@ -271,7 +333,6 @@ public class RegnalDateFromString {
         Integer ordinal = normalizeOrdinal(matcher.group(4));
         return dateFromRegnalDate.rangeForRegnalYear(regnal, monarch, ordinal);
     }
-
 
     private class PossibleFeasts {
 

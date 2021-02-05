@@ -4,9 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 import java.util.regex.Pattern;
 
 public class FixedFeastLookupUtility {
@@ -36,7 +34,7 @@ public class FixedFeastLookupUtility {
 
     public String lookup(String feastText) {
 
-        String lookupTmp = feastText.replaceAll("of|the|\\(|\\)", "");
+        String lookupTmp = feastText.replaceAll("of|the|\\(|\\)|", "");
         lookupTmp = lookupTmp.trim().toLowerCase(Locale.ROOT);
         lookupTmp = lookupTmp.replaceAll("\\s+", " ");
         if (saintPattern.matcher(lookupTmp).find()) {
@@ -45,9 +43,17 @@ public class FixedFeastLookupUtility {
 
         HashMap<String, Integer> matches = new HashMap<>();
 
+        // TODO - tidy
         String[] lookupTokens = lookupTmp.split(" ");
+        List<String> list = new ArrayList<String>(Arrays.asList(lookupTokens));
+        list.remove("octave");
+        list.remove("quindene");
+        list.remove("morrow");
+        list.remove("eve");
+        list.remove("st");
 
-        for (String token : lookupTokens) {
+
+        for (String token : list) {
             for (String key : feastsLookup.keySet()) {
                 if (key.contains(token)) {
                     int val = matches.getOrDefault(key, 0);

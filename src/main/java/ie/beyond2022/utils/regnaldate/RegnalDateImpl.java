@@ -23,27 +23,16 @@ public class RegnalDateImpl implements RegnalDate {
     // part of the original text with the regnal year
     private final String regnalYearMonarch;
 
-    private final DateTime startDate;
-    private final DateTime endDate;
+    private final DateTime feastDate;
 
     DateTimeFormatter formatter = DateTimeFormat.forPattern("yyyy-MM-dd").withChronology(GJChronology.getInstance());
 
     public RegnalDateImpl(final String originalText, final String dayMonthFeastText, final String regnalYearMonarch,
-                          final DateTime startDate) {
+                          final DateTime feastDate) {
         this.originalText = originalText;
         this.dayMonthFeastText = dayMonthFeastText;
         this.regnalYearMonarch = regnalYearMonarch;
-        this.startDate = startDate;
-        this.endDate = null;
-    }
-
-    public RegnalDateImpl(final String originalText, final String regnalYearMonarch, final String startDate,
-                          final String endDate) {
-        this.originalText = originalText;
-        this.dayMonthFeastText = null;
-        this.regnalYearMonarch = regnalYearMonarch;
-        this.startDate = formatter.parseDateTime(startDate);
-        this.endDate = formatter.parseDateTime(endDate);
+        this.feastDate = feastDate;
     }
 
     @Override
@@ -73,12 +62,12 @@ public class RegnalDateImpl implements RegnalDate {
 
     @Override
     public String getYear() {
-        return String.valueOf(startDate.getYear());
+        return String.valueOf(feastDate.getYear());
     }
 
     @Override
     public String toString() {
-        return startDate.toString(formatter);
+        return feastDate.toString(formatter);
     }
 
 }

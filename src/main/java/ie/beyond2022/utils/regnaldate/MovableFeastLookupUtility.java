@@ -23,10 +23,11 @@ public class MovableFeastLookupUtility {
                     String line = reader.readLine();
                     String[] tmp = line.split(":");
 
-                    if (tmp.length == 9) {
+                    if (tmp.length == 13) {
                         feastsLookup.put(Integer.parseInt(tmp[0]), new MovableFeastsForYear(new Feast(tmp[1]),
                                 new Feast(tmp[2]), new Feast(tmp[3]), new Feast(tmp[4]), new Feast(tmp[5]),
-                                new Feast(tmp[6]), new Feast(tmp[7]), new Feast(tmp[8])));
+                                new Feast(tmp[6]), new Feast(tmp[7]), new Feast(tmp[8]),  new Feast(tmp[9]),
+                                new Feast(tmp[10]),  new Feast(tmp[11]), new Feast(tmp[12])));
                     }
                 }
             }
