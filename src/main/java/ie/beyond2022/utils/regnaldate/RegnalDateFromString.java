@@ -32,6 +32,11 @@ public class RegnalDateFromString {
             {"jul", 7}, {"aug", 8}, {"sep", 9}, {"oct", 10}, {"nov", 11}, {"dec", 12}
     }).collect(Collectors.toMap(data -> (String) data[0], data -> (Integer) data[1]));
 
+    Map<String, Integer> days = Stream.of(new Object[][]{
+            {"monday", 1}, {"tuesday", 2}, {"wednesday", 3}, {"thursday", 4}, {"friday", 5}, {"saturday", 6},
+            {"sunday", 7}
+    }).collect(Collectors.toMap(data -> (String) data[0], data -> (Integer) data[1]));
+
     Map<String, Integer> ordinals = Stream.of(new Object[][]{
             {"i", 1}, {"ii", 2}, {"iii", 3}, {"iv", 4}, {"v", 5}, {"vi", 6}, {"vii", 7}, {"viii", 8}
     }).collect(Collectors.toMap(data -> (String) data[0], data -> (Integer) data[1]));
@@ -91,6 +96,8 @@ public class RegnalDateFromString {
 
     Pattern evePattern = Pattern.compile("\\beve\\b", Pattern.CASE_INSENSITIVE);
 
+    Pattern beforeAfterPattern = Pattern.compile("\\b(Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday)\\b.+(after|before)", Pattern.CASE_INSENSITIVE);
+
     public RegnalDateFromString() throws IOException {
     }
 
@@ -148,6 +155,38 @@ public class RegnalDateFromString {
                         regnalDate.getRegnalYearMonarch(), eve);
             }
         }
+        return regnalDate;
+    }
+
+    RegnalDate beforeOrAfter(RegnalDate regnalDate) {
+        if (regnalDate instanceof RegnalDateImpl) {
+            Matcher matcher = beforeAfterPattern.matcher(regnalDate.getOriginalText());
+            if (matcher.find()) {
+                if (matcher.groupCount() == 2) {
+                    String day = matcher.group(1).toLowerCase();
+                    String beforeAfter = matcher.group(2).toLowerCase();
+                    int dayVal  = days.getOrDefault(day, -1);
+
+                    if (dayVal >= 1 && dayVal <= 7) {
+                        DateTime dt = formatter.parseDateTime(regnalDate.toString());
+                        int dayOfWeekNo = dt.dayOfWeek().get();
+                        if (beforeAfter.equals("after")) {
+                            int offset = DaysOfWeekUtility.calculateDayAfterFeast(dayOfWeekNo, dayVal);
+                            DateTime offset_dt = dt.plusDays(offset);
+                            return new RegnalDateImpl(regnalDate.getOriginalText(), regnalDate.getDayMonthFeastText(),
+                                    regnalDate.getRegnalYearMonarch(), offset_dt);
+                        } else {
+                            int offset = DaysOfWeekUtility.calculateDayBeforeFeast(dayOfWeekNo, dayVal);
+                            DateTime offset_dt = dt.minusDays(offset);
+                            return new RegnalDateImpl(regnalDate.getOriginalText(), regnalDate.getDayMonthFeastText(),
+                                    regnalDate.getRegnalYearMonarch(), offset_dt);
+                        }
+                    }
+                }
+            }
+
+        }
+
         return regnalDate;
     }
 
@@ -317,6 +356,10 @@ public class RegnalDateFromString {
         } else if (regnalYearMatcher.matches()) {
             RegnalYear regnalYear = regnalYear(regnalYearMatcher);
             return new RegnalDateAsRangeImpl(text, regnalYear, text);
+        }
+
+        if (regnalDate != null && contains(text, beforeAfterPattern)) {
+            regnalDate = beforeOrAfter(regnalDate);
         }
 
         // adjust if morrow or eve

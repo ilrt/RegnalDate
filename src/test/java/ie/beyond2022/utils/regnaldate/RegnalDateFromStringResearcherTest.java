@@ -166,16 +166,13 @@ public class RegnalDateFromStringResearcherTest {
         assertTrue(val.isDate());
         assertFalse(val.isRange());
     }
-//
-//
-//
-//
-//
-//
-//
-//
 
+    @Test
+    public void test_monday_next_after_Michaelmas_24_Edward_I() throws IOException {
+        RegnalDate val = RegnalDate.parseString("Monday next after Michaelmas 24 Edward I");
+        assertNotNull(val);
+        assertEquals("1296-10-01", val.toString());
+    }
 
-    //    Monday next after Michaelmas 24 Edward I -1 October 1296
 
 }
