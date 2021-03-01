@@ -1,4 +1,4 @@
-package ie.beyond2022.utils.regnaldate;
+package ie.beyond2022.utils.regnaldate.utils;
 
 public class DaysOfWeekUtility {
     /**

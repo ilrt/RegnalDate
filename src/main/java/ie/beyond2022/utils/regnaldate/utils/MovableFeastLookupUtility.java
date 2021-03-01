@@ -1,4 +1,7 @@
-package ie.beyond2022.utils.regnaldate;
+package ie.beyond2022.utils.regnaldate.utils;
+
+import ie.beyond2022.utils.regnaldate.Feast;
+import ie.beyond2022.utils.regnaldate.MovableFeastsForYear;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -7,12 +10,22 @@ import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Provides a lookup utility that gives the dates of movable feasts that occur in a year, between 1216–1509.
+ * For a given year, a MovableFeastsForYear object will be returned, that gives the date that year for
+ * Easter, Quinquageisima Shrove Tuesday, Ash Wednesday Quadrageisma, Palm Sunday, Food Friday, Rogation,
+ * Ascension, Pentecost, Trinity, and Corpus Christi.
+ *
+ * The dates are loaded from a text file when the class is instantiated.
+ */
 public class MovableFeastLookupUtility {
 
+    // data structure holding our movable dates. The year is the lookup key.
     protected Map<Integer, MovableFeastsForYear> feastsLookup;
 
     public MovableFeastLookupUtility() throws IOException {
-        feastsLookup = new HashMap<Integer, MovableFeastsForYear>();
+
+        feastsLookup = new HashMap<>();
 
         ClassLoader classLoader = getClass().getClassLoader();
         if (classLoader != null) {
@@ -34,7 +47,23 @@ public class MovableFeastLookupUtility {
         }
     }
 
+    /**
+     * Return a MovableFeastsForYear object for a year between 1216 and 1509, which encapsulated the dates or
+     * commonly used movable feasts for that calendar year.
+     *
+     * @param year  a calendar year between 1216 and 1509.
+     * @return      a MovableFeastsForYear object or null.
+     */
     public MovableFeastsForYear lookup(Integer year) {
         return feastsLookup.getOrDefault(year, null);
+    }
+
+    /**
+     * Number of years in the data structure.
+     *
+     * @return number of years in the data structure.
+     */
+    public int size() {
+        return feastsLookup.size();
     }
 }

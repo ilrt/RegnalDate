@@ -1,5 +1,6 @@
 package ie.beyond2022.utils.regnaldate;
 
+import ie.beyond2022.utils.regnaldate.utils.MovableFeastLookupUtility;
 import org.joda.time.Chronology;
 import org.joda.time.DateTime;
 import org.joda.time.chrono.GJChronology;
@@ -21,7 +22,7 @@ public class EasterDateLookupTest {
     public void testKeyNumber() throws IOException {
         // Test we loaded the correct number of years
         MovableFeastLookupUtility lookup = new MovableFeastLookupUtility();
-        assertEquals(294, lookup.feastsLookup.keySet().size());
+        assertEquals(294, lookup.size());
     }
 
     // ---------- The following tests check a snapshot of years

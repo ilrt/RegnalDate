@@ -1,13 +1,14 @@
 package ie.beyond2022.utils.regnaldate;
 
+import ie.beyond2022.utils.regnaldate.utils.DaysOfWeekUtility;
+import ie.beyond2022.utils.regnaldate.utils.FixedFeastLookupUtility;
+import ie.beyond2022.utils.regnaldate.utils.MovableFeastLookupUtility;
 import org.joda.time.DateTime;
 import org.joda.time.chrono.GJChronology;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
 import java.io.IOException;
-import java.util.Date;
-import java.util.Locale;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

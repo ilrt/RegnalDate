@@ -1,6 +1,7 @@
-package ie.beyond2022.utils.regnaldate;
+package ie.beyond2022.utils.regnaldate.utils;
 
 
+import ie.beyond2022.utils.regnaldate.utils.DaysOfWeekUtility;
 import org.junit.jupiter.api.Test;
 
 

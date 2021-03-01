@@ -1,4 +1,6 @@
-package ie.beyond2022.utils.regnaldate;
+package ie.beyond2022.utils.regnaldate.utils;
+
+import ie.beyond2022.utils.regnaldate.RegnalYear;
 
 import java.io.BufferedReader;
 import java.io.IOException;

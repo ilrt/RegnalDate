@@ -1,5 +1,6 @@
-package ie.beyond2022.utils.regnaldate;
+package ie.beyond2022.utils.regnaldate.utils;
 
+import ie.beyond2022.utils.regnaldate.MovableFeastsForYear;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
